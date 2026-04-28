@@ -1,85 +1,213 @@
-# project A, personal portfolio site
-
-**difficulty:** easy to medium
-**estimated time:** 60–75 minutes
-**stack:** next.js 15 + typescript + tailwind + magic UI
-
-## before you paste the prompt
-
-1. fill in the `[BRACKETS]` below with your real info. don't skip this, generic content = generic output.
-2. make sure you're in this folder: `projects/01-portfolio`
-3. launch claude code: `claude`
-
-## your starter prompt
-
-copy everything between the triple-dashes into claude code:
+# CLAUDE CODE EXECUTION FILE
+# ─────────────────────────────────────────────────────────────
+# HOW TO RUN: Open Claude Code in your project folder and say:
+#   "Read prompt.md and do everything in it"
+# Claude Code will read this file and execute all steps autonomously.
+# ─────────────────────────────────────────────────────────────
 
 ---
 
-Build a personal developer portfolio for **[YOUR NAME]**, a **[YOUR MAJOR]** student at **[YOUR SCHOOL]**, graduating **[YEAR]**.
+# SamirOS — Browser Desktop Portfolio
 
-**stack requirements:**
-- next.js 15 with App Router, typescript, and the `src/` directory layout
-- tailwind CSS (use the default config, no custom plugins unless needed)
-- **magic UI components via the `magic` MCP** for all animated elements, do not hand-roll animations
-- use `pnpm` for all package management (never `npm` or `yarn`)
-
-**workflow requirements:**
-- before writing any code, use the `context7` MCP to fetch the latest next.js 15 App Router docs and the current magic UI component catalog
-- when making visual or layout decisions, delegate to the `ui-designer` subagent
-- follow commit message conventions from the `everything-claude-code-conventions` skill (conventional commits: `feat:`, `fix:`, `docs:`, etc.)
-
-**page structure (single page, smooth scroll between sections):**
-
-1. **hero**, my name, a one-line tagline, and an animated element from magic UI (pick one that fits: animated gradient text, sparkles, or typing effect)
-2. **projects**, 3 cards in a responsive grid (1 col mobile, 2 col tablet, 3 col desktop). each card should have a magic UI hover effect.
-3. **about**, 2-3 paragraphs about me, my interests, and what I'm looking for next
-4. **contact**, github, linkedin, and email as icon links
-
-**design direction:**
-- dark mode by default, no light mode toggle needed
-- clean and minimal, whitespace over decoration
-- one accent color: **[PICK ONE: blue / green / purple / orange / red]**
-- font: use a clean sans-serif from `next/font/google`, pick Inter, Geist, or JetBrains Mono
-
-**my projects to feature:**
-
-1. **[Multi-Agent Fashion Design Pipeline]**, [Built scalable data pipelines in Python to process structured and unstructured data into PostgreSQL, enabling 5× faster analytics and content generation. Deployed containerized ETL workflows on Google Cloud Run and integrated multi-agent systems, improving data consistency and processing efficiency by 40%.
-], [Tech stack: Python, PostgreSQL, Google Cloud Run, Docker, ETL pipelines, multi-agent systems, cloud-native data engineering tools.
-], [link or "coming soon"]
-2. **[RAG-Based Clinical Data Integration System]**, [Built a RAG-based clinical data integration system using Python and LangChain to ingest and unify data from WHO, CDC, and public health sources for context-aware analytics. Implemented embedding, cleansing, and retrieval pipelines to achieve 10× query scalability and 35% better insight accuracy, while converting outputs into clear, actionable insights for end users.], [Tech stack: Python, LangChain, vector databases, retrieval-augmented generation (RAG), embeddings, data pipelines, public health data APIs (WHO/CDC).], [link]
-3. **[AI Powered Skin Lesion Classificaiton Pipeline]**, [Built an end-to-end skin lesion classification pipeline in Python using PyTorch, processing a 29K-image dataset with optimized preprocessing and statistical sampling to improve rare-class detection by 33%. Achieved a 92.6% F1-score while optimizing data workflows for low-latency inference using Pandas-based evaluation and data engineering techniques.], [Tech stack: Python, PyTorch, Pandas, NumPy, machine learning pipelines, data preprocessing, statistical sampling, image datasets (29K medical images).], [link]
-
-**about me:**
-[I’m a computer science student focused on building practical systems in data engineering, machine learning, and full-stack development. I’m especially interested in AI-driven applications, scalable backend systems, and turning data into meaningful insights through well-designed pipelines. I’m currently working on projects involving RAG systems, clinical data integration, and deployment-ready ML pipelines, and I’m looking for opportunities where I can contribute to real-world AI/ML or backend engineering systems while continuing to grow as a software engineer.
-]
-
-**contact:**
-- github: [https://github.com/sKumal2]
-- linkedin: [https://www.linkedin.com/in/samirkumal/]
-- email: [skumal2@student.gsu.edu]
-
-**deployment workflow (do this at the end):**
-1. run `pnpm build` locally and fix any errors
-2. use the `github` MCP to create a new public repo named `portfolio` under my github account and push the code
-3. use the `vercel` MCP to create a new vercel project from that github repo and deploy it
-4. give me the final production URL
+Rebuild Samir Kumal's personal portfolio as a **full browser-based desktop OS simulation**, inspired by https://dustinbrett.com (daedalOS). The visitor lands on a desktop — not a webpage. Everything lives inside draggable, resizable windows. There is no traditional scrolling layout.
 
 ---
 
-## tips while building
+## Stack Requirements
 
-- **review claude's diffs before accepting them.** if something looks off, push back.
-- **iterate on one thing at a time.** "the hero feels cramped, add more vertical padding" beats "make the whole site better."
-- **ask to see the magic UI options.** prompt: "Use the magic MCP to show me 5 hero animation components and let me pick one."
-- **don't skip the `ui-designer` subagent.** try: "Delegate to ui-designer: review the projects section and suggest 3 improvements."
+- Next.js 15 with App Router, TypeScript, `src/` directory layout
+- Tailwind CSS (default config, no custom plugins)
+- `pnpm` for all package management (never npm or yarn)
+- `react-rnd` for draggable + resizable windows
+- `lucide-react` for all icons (desktop icons, taskbar, window chrome)
+- Magic UI components via the `magic` MCP for animated elements (boot screen, wallpaper effects)
+- Framer Motion for window open/close/minimize animations
 
-## done checklist
+---
 
-- [ ] site runs locally via `pnpm dev`
-- [ ] at least 2 magic UI components are visible on the page
-- [ ] your 3 real projects are in the grid, not placeholder text
-- [ ] looks good on a 375px viewport (chrome DevTools mobile mode)
-- [ ] pushed to github via the `github` MCP
-- [ ] deployed to vercel via the `vercel` MCP
-- [ ] you have a live URL you'd share with someone
+## Workflow Requirements
+
+- Before writing any code, use the `context7` MCP to fetch the latest Next.js 15 App Router docs
+- Delegate all visual and layout decisions to the `ui-designer` subagent
+- Use conventional commits throughout: `feat:`, `fix:`, `style:`, `refactor:`, `chore:`
+
+---
+
+## Desktop Design Direction
+
+**OS Name:** SamirOS  
+**Version tag:** v1.0 — shown in boot screen and About dialog  
+**Aesthetic:** Dark cyberpunk-minimal. Think: Windows 11 meets a hacker terminal. Not cartoonish.
+
+- Wallpaper: deep dark background (`#050810`) with an animated subtle blue-purple particle mesh or a static low-opacity circuit-board SVG pattern. Use Magic UI's `Particles` or `Aurora` component if available, otherwise a CSS animated gradient.
+- Taskbar: pinned to the bottom. Height ~48px. Frosted glass effect (`backdrop-blur`, semi-transparent dark). Shows: Start/logo button on the left, open window buttons in the center, clock (live, updates every second) + a small "GSU CS '28" badge on the right.
+- Desktop icons: 2×3 grid in the top-left area. Each icon has a label below it. Double-click to open the window.
+- Window chrome: dark title bar (`#0f1117`), colored accent border on focus (blue `#3B82F6`), standard minimize / maximize / close buttons — delegate exact style to `ui-designer`.
+- Font: `Space Mono` for OS shell elements (taskbar, window chrome, icon labels). `Inter` for body content inside windows. Load both via `next/font/google`.
+
+---
+
+## Boot Screen (shown on first load, ~2.5 seconds)
+
+Full-screen boot animation before the desktop appears:
+1. Show `SAMIR OS v1.0` in large Space Mono text, centered
+2. A loading bar fills beneath it (CSS animation, ~2s)
+3. A single line of fake boot log text fades in: `Initializing portfolio kernel... OK`
+4. Fade out to desktop
+
+Use Magic UI `Typing Effect` or a custom CSS keyframe — delegate the exact treatment to `ui-designer`.
+
+---
+
+## Desktop Icons & Windows
+
+Each icon double-clicked opens a window. Define all 6 icons:
+
+### 1. `about.exe` — About Me
+**Icon:** `User` (lucide)  
+**Window title:** About Samir  
+**Content:**
+> I'm a Computer Science student at Georgia State University (graduating May 2028), focused on data engineering, machine learning, and AI systems.
+>
+> I build practical, deployment-ready pipelines — RAG systems, clinical data integration, and ML classification at scale. I'm also an open-source contributor to PyTorch Vision, where I worked on improving data processing reliability in production workflows.
+>
+> Currently looking for opportunities in AI/ML engineering or backend data systems where I can contribute to real-world infrastructure and keep growing fast.
+
+---
+
+### 2. `projects/` — Projects Folder
+**Icon:** `FolderOpen` (lucide)  
+**Window title:** Projects  
+**Content:** A 1-column list of 3 project entries. Each entry is a mini card with: title, date range, 2-line description, and a row of tech stack pills.
+
+**Project 1 — Multi-Agent Fashion Design Pipeline**
+- Nov 2025 – Present
+- Built end-to-end Python data pipelines to extract, transform, and load structured and unstructured data into PostgreSQL, enabling 5× faster analytics. Orchestrated containerized ETL workflows on Google Cloud Run; integrated multi-agent systems improving data consistency by 40%.
+- Stack: Python, PostgreSQL, Docker, Google Cloud Run, ETL, Multi-Agent Systems
+
+**Project 2 — RAG-Based Clinical Data Integration System**
+- Jan 2026 – Present
+- Designed a RAG architecture ingesting data from WHO, CDC, and public health repositories. Built embedding, cleansing, and relevance-scoring pipelines achieving 10× query scalability and 35% better insight accuracy.
+- Stack: Python, LangChain, Vector Databases, RAG, Embeddings
+
+**Project 3 — AI-Powered Skin Lesion Classification Pipeline**
+- Oct 2025 – Nov 2025
+- Engineered a full ML pipeline for a 29K-image dataset using statistical sampling to improve rare-class detection by 33%. Achieved 92.6% F1-score using PyTorch and Pandas, optimized for low-latency inference.
+- Stack: Python, PyTorch, Pandas, NumPy, Statistical Sampling
+
+---
+
+### 3. `education.txt` — Education
+**Icon:** `GraduationCap` (lucide)  
+**Window title:** Education  
+**Content:** Styled like a terminal text file viewer (monospaced, dark bg, slight green or blue tint on labels).
+
+```
+INSTITUTION   Georgia State University
+LOCATION      Atlanta, GA
+DEGREE        B.S. Computer Science
+PERIOD        Aug 2024 – May 2028
+
+COURSEWORK
+  - Data Structures and Algorithms
+  - Linear Algebra
+  - Probability and Statistics
+  - System Level Programming
+  - Software Development
+```
+
+---
+
+### 4. `skills.json` — Technical Skills
+**Icon:** `Code2` (lucide)  
+**Window title:** skills.json  
+**Content:** Render as a syntax-highlighted JSON file using `react-syntax-highlighter` with a dark theme (atomOneDark or similar).
+
+```json
+{
+  "languages": ["Python", "Java", "C/C++", "SQL", "JavaScript", "R"],
+  "data_engineering": ["ETL Pipelines", "Data Integration", "Data Cleansing", "Data Modeling", "Statistical Analysis"],
+  "databases": ["PostgreSQL", "MongoDB", "SQL", "Spark (familiar)", "Snowflake (familiar)"],
+  "ai_ml": ["PyTorch", "Scikit-learn", "Pandas", "NumPy", "TensorFlow", "Statistical Modeling"],
+  "genai_nlp": ["RAG", "LLMs", "Vector Embeddings", "Prompt Engineering", "Multi-Agent Systems"],
+  "cloud_devops": ["Google Cloud Platform", "Docker", "Cloud Run", "Linux", "Git"]
+}
+```
+
+---
+
+### 5. `experience.log` — Experience
+**Icon:** `Briefcase` (lucide)  
+**Window title:** experience.log  
+**Content:** Terminal-style log format, monospaced, each entry prefixed with a timestamp-style date.
+
+```
+[2026-01] Open Source Contributor — PyTorch Vision (Remote)
+          Developed a Python-based fix improving data processing
+          and model compatibility within PyTorch Vision.
+          Collaborated with distributed teams in agile open-source env.
+
+[2023-06] Math Tutor — Gyaanshala (Kathmandu, Nepal)
+          Tracked student progress with statistical reasoning;
+          improved exam outcomes by 28% across 30+ students.
+          Communicated quantitative concepts to non-technical audiences.
+```
+
+---
+
+### 6. `contact.lnk` — Contact
+**Icon:** `Mail` (lucide)  
+**Window title:** Contact  
+**Content:** Three large icon+link rows, centered in the window.
+
+- GitHub: https://github.com/sKumal2
+- LinkedIn: https://www.linkedin.com/in/samirkumal/
+- Email: skumal2@student.gsu.edu
+
+Each link opens in a new tab. Add a subtle hover lift effect on each row.
+
+---
+
+## Window Behavior Requirements
+
+- Windows open centered on the desktop with a slight scale-up + fade animation (Framer Motion)
+- Windows are draggable by their title bar (`react-rnd`)
+- Windows are resizable from any edge/corner (`react-rnd`)
+- Minimize: window slides down to taskbar and disappears; taskbar button stays lit
+- Maximize: window fills the desktop area above the taskbar
+- Close: window fades out and removes from state
+- Multiple windows can be open simultaneously; clicking a window brings it to front (z-index management via incrementing counter in state)
+- Taskbar shows a button for each open window; clicking it toggles minimize/restore
+- Right-click on the desktop wallpaper shows a small context menu with two options: "Refresh Desktop" and "About SamirOS" (opens a small dialog: OS name, version v1.0, and "© Samir Kumal 2026")
+
+---
+
+## Mobile Fallback
+
+On screens under 768px, skip the desktop simulation entirely. Show a clean minimal single-page portfolio (dark background, same fonts, same content in order: About → Projects → Education → Skills → Experience → Contact). Add a banner at the top: `SamirOS runs best on desktop`.
+
+---
+
+## Deployment Steps (run in order after pnpm build passes with zero errors)
+
+1. Run `pnpm build` and fix all TypeScript/lint errors before proceeding.
+2. Use the `github` MCP to create a new **public** repo named `samir-os` under the `sKumal2` GitHub account and push all code.
+3. Use the `vercel` MCP to create a new Vercel project from that GitHub repo and trigger a production deployment.
+4. Return the final live production URL.
+
+---
+
+## Done Checklist
+
+- [ ] Boot screen plays on first load (~2.5s) then fades to desktop
+- [ ] All 6 desktop icons visible; double-click opens correct window
+- [ ] Windows are draggable, resizable, minimizable, maximizable, and closable
+- [ ] Taskbar shows live clock and reflects open windows
+- [ ] skills.json window shows syntax-highlighted JSON
+- [ ] education.txt and experience.log use terminal/monospace styling
+- [ ] Right-click context menu works on the desktop wallpaper
+- [ ] Mobile fallback renders correctly at 375px
+- [ ] `pnpm build` passes with zero errors
+- [ ] Pushed to GitHub repo `samir-os` via the `github` MCP
+- [ ] Deployed to Vercel via the `vercel` MCP
+- [ ] Live URL returned

@@ -98,26 +98,26 @@ date                Show current date and time
 echo [text]         Print text back`;
 
 const LS_ROOT =
-  "about.exe   projects/   education.txt   skills.json   experience   contact.lnk   terminal.exe   mypc/   recycle-bin/";
+  "about   projects/   education   skills.json   experience   contact   terminal   mypc/   recycle-bin/";
 
 const FILE_TO_WINDOW: Record<string, WindowType> = {
-  "about.exe": "about",
+  "about": "about",
   about: "about",
   "projects/": "projects",
   projects: "projects",
-  "education.txt": "education",
+  "education": "education",
   education: "education",
   "skills.json": "skills",
   skills: "skills",
   "experience": "experience",
   experience: "experience",
-  "contact.lnk": "contact",
+  "contact": "contact",
   contact: "contact",
   "fun/": "fun",
   fun: "fun",
   "secret.exe": "secret",
   secret: "secret",
-  "terminal.exe": "terminal",
+  "terminal": "terminal",
   terminal: "terminal",
 };
 
@@ -126,13 +126,13 @@ Type 'help' for available commands.
 `;
 
 const BUILTIN_NAMES = new Set([
-  "about.exe", "about",
+  "about", "about",
   "projects", "projects/",
-  "education.txt", "education",
+  "education", "education",
   "skills.json", "skills",
   "experience", "experience",
-  "contact.lnk", "contact",
-  "terminal.exe", "terminal",
+  "contact", "contact",
+  "terminal", "terminal",
   "mypc", "mypc/",
   "recycle-bin", "recycle-bin/",
 ]);
@@ -258,9 +258,9 @@ export function TerminalWindow({ onOpenWindow, deletedItems = [] }: Props) {
         const file = args[0];
         if (!file) {
           output = "cat: missing file operand";
-        } else if (file === "about.exe") {
+        } else if (file === "about") {
           output = ABOUT_TEXT;
-        } else if (file === "education.txt") {
+        } else if (file === "education") {
           output = EDUCATION_TEXT;
         } else if (file === "skills.json") {
           output = SKILLS_TEXT;

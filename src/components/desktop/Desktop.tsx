@@ -45,15 +45,15 @@ interface IconDef {
 }
 
 const ICONS: IconDef[] = [
-  { type: "about",       icon: User,          label: "about.exe"     },
+  { type: "about",       icon: User,          label: "about"     },
   { type: "projects",    icon: FolderOpen,    label: "projects/"     },
-  { type: "education",   icon: GraduationCap, label: "education.txt" },
+  { type: "education",   icon: GraduationCap, label: "education" },
   { type: "skills",      icon: Code2,         label: "skills.json"   },
   { type: "experience",  icon: Briefcase,     label: "experience"   },
-  { type: "contact",     icon: Mail,          label: "contact.lnk"   },
+  { type: "contact",     icon: Mail,          label: "contact"   },
   { type: "fun",         icon: Gamepad2,      label: "fun/"          },
   { type: "secret",      icon: Lock,          label: "secret.exe"    },
-  { type: "terminal",    icon: Terminal,      label: "terminal.exe"  },
+  { type: "terminal",    icon: Terminal,      label: "terminal"  },
   { type: "mypc",        icon: Monitor,       label: "mypc/"         },
   { type: "recycle-bin", icon: Trash2,        label: "recycle-bin/"  },
 ];

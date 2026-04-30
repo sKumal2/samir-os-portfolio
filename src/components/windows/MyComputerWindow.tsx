@@ -33,13 +33,13 @@ const FOLDERS: { key: FolderKey; label: string; icon: LucideIcon }[] = [
 ];
 
 const DESKTOP_ITEMS: { type: WindowType; icon: LucideIcon; label: string }[] = [
-  { type: "about",      icon: User,          label: "about.exe"      },
+  { type: "about",      icon: User,          label: "about"      },
   { type: "projects",   icon: FolderOpen,    label: "projects/"      },
-  { type: "education",  icon: GraduationCap, label: "education.txt"  },
+  { type: "education",  icon: GraduationCap, label: "education"  },
   { type: "skills",     icon: Code2,         label: "skills.json"    },
   { type: "experience", icon: Briefcase,     label: "experience"    },
-  { type: "contact",    icon: Mail,          label: "contact.lnk"    },
-  { type: "terminal",   icon: Terminal,      label: "terminal.exe"   },
+  { type: "contact",    icon: Mail,          label: "contact"    },
+  { type: "terminal",   icon: Terminal,      label: "terminal"   },
 ];
 
 interface ProjectItem {
@@ -58,7 +58,7 @@ const DOCUMENTS: { name: string; icon: LucideIcon; target: WindowType }[] = [
   { name: "resume.pdf",     icon: FileText, target: "contact"    },
   { name: "skills.json",    icon: FileJson, target: "skills"     },
   { name: "experience",    icon: FileText, target: "experience" },
-  { name: "education.txt",  icon: FileText, target: "education"  },
+  { name: "education",  icon: FileText, target: "education"  },
 ];
 
 export function MyComputerWindow({ onOpenWindow }: Props) {

@@ -90,7 +90,7 @@ export function ProjectFashionWindow() {
       {/* Bottom bar */}
       <div className="border-t border-[#1e2a3a] px-5 py-3 flex-shrink-0">
         <a
-          href="https://github.com/sKumal2"
+          href="https://github.com/sKumal2/mootboard"
           target="_blank"
           rel="noopener noreferrer"
           className="inline-flex items-center gap-2 px-3 py-1.5 text-[10px] tracking-widest rounded border border-[#1e2a3a] bg-[#161b22] text-zinc-200 hover:bg-blue-500/15 hover:border-blue-500/50 transition-colors"

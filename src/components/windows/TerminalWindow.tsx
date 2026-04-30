@@ -98,27 +98,20 @@ date                Show current date and time
 echo [text]         Print text back`;
 
 const LS_ROOT =
-  "about   projects/   education   skills.json   experience   contact   terminal   mypc/   recycle-bin/";
+  "about   projects/   education   skills   experience   contact   terminal   mypc/   recycle-bin/";
 
 const FILE_TO_WINDOW: Record<string, WindowType> = {
-  "about": "about",
   about: "about",
-  "projects/": "projects",
   projects: "projects",
-  "education": "education",
   education: "education",
-  "skills.json": "skills",
   skills: "skills",
-  "experience": "experience",
   experience: "experience",
-  "contact": "contact",
   contact: "contact",
-  "fun/": "fun",
   fun: "fun",
-  "secret.exe": "secret",
   secret: "secret",
-  "terminal": "terminal",
   terminal: "terminal",
+  mypc: "mypc",
+  "recycle-bin": "recycle-bin",
 };
 
 const WELCOME = `SamirOS Terminal v1.0
@@ -126,15 +119,17 @@ Type 'help' for available commands.
 `;
 
 const BUILTIN_NAMES = new Set([
-  "about", "about",
-  "projects", "projects/",
-  "education", "education",
-  "skills.json", "skills",
-  "experience", "experience",
-  "contact", "contact",
-  "terminal", "terminal",
-  "mypc", "mypc/",
-  "recycle-bin", "recycle-bin/",
+  "about",
+  "projects",
+  "education",
+  "skills",
+  "experience",
+  "contact",
+  "fun",
+  "secret",
+  "terminal",
+  "mypc",
+  "recycle-bin",
 ]);
 
 export function TerminalWindow({ onOpenWindow, deletedItems = [] }: Props) {
@@ -262,7 +257,7 @@ export function TerminalWindow({ onOpenWindow, deletedItems = [] }: Props) {
           output = ABOUT_TEXT;
         } else if (file === "education") {
           output = EDUCATION_TEXT;
-        } else if (file === "skills.json") {
+        } else if (file === "skills") {
           output = SKILLS_TEXT;
         } else if (file === "experience") {
           output = EXPERIENCE_TEXT;

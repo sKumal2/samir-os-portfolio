@@ -1,5 +1,7 @@
 # SamirOS
 
+demo : https://01-portfolio-plum.vercel.app/
+
 SamirOS is a browser-based, interactive desktop operating system simulation designed to showcase my software engineering portfolio. Built with modern web technologies, it provides an immersive experience that goes beyond a traditional static resume site.
 
 ## Features

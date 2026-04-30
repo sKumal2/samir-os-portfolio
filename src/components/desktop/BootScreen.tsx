@@ -52,13 +52,13 @@ export function BootScreen({ onComplete }: Props) {
           className="text-center"
           style={{ fontFamily: "var(--font-space-mono), monospace" }}
         >
-          <p className="text-[10px] tracking-[0.5em] text-blue-400/50 uppercase mb-3">
+          <p className="text-[10px] tracking-[0.5em] text-red-400/50 uppercase mb-3">
             system
           </p>
           <h1 className="text-5xl font-bold tracking-[0.15em] text-white">
             SAMIR OS
           </h1>
-          <p className="mt-2 text-sm tracking-[0.4em] text-blue-400/80">v1.0</p>
+          <p className="mt-2 text-sm tracking-[0.4em] text-red-400/80">v1.0</p>
         </div>
 
         <div className="w-72">

@@ -2,7 +2,6 @@
 
 import { Rnd } from "react-rnd";
 import { motion } from "motion/react";
-import { Minus, Square, X } from "lucide-react";
 import type { WindowState } from "@/types/desktop";
 
 interface Props {
@@ -63,79 +62,68 @@ export function Window({
     >
       <motion.div
         key={win.id}
-        initial={{ opacity: 0, scale: 0.92 }}
+        data-window="true"
+        initial={{ opacity: 0, scale: 0.93 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.18, ease: "easeOut" }}
-        className="flex flex-col h-full rounded-md overflow-hidden"
+        className="flex flex-col h-full rounded-lg overflow-hidden"
         style={{
-          border: isFocused ? "1px solid #3B82F6" : "1px solid #1f2937",
+          background: "#0d1117",
+          border: isFocused
+            ? "1px solid rgba(59,130,246,0.7)"
+            : "1px solid rgba(59,130,246,0.35)",
           boxShadow: isFocused
-            ? "0 0 0 1px rgba(59,130,246,0.25), 0 25px 60px rgba(0,0,0,0.9)"
-            : "0 20px 40px rgba(0,0,0,0.7)",
-          background: "#050810",
+            ? "0 24px 80px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.04), 0 0 30px rgba(59,130,246,0.08)"
+            : "0 24px 80px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.04)",
         }}
       >
-        {/* Title bar */}
+        {/* Title bar — macOS style: controls LEFT, title right */}
         <div
-          className="window-drag-handle flex h-9 items-center justify-between px-3 select-none flex-shrink-0 cursor-grab active:cursor-grabbing"
+          className="window-drag-handle flex h-10 items-center select-none flex-shrink-0 cursor-grab active:cursor-grabbing"
           style={{
-            backgroundColor: "#0f1117",
-            borderBottom: "1px solid #1a1f2e",
-            borderTop: isFocused ? "2px solid #3B82F6" : "2px solid transparent",
+            backgroundColor: "#161b22",
+            borderBottom: "1px solid rgba(255,255,255,0.08)",
             fontFamily: "var(--font-space-mono), monospace",
           }}
         >
-          <span className="text-[10px] tracking-widest text-zinc-500 uppercase truncate">
-            {win.title}
-          </span>
-
-          {/* Window controls */}
-          <div className="flex items-center gap-1.5 flex-shrink-0 ml-3">
+          {/* macOS traffic-light controls */}
+          <div
+            className="flex items-center gap-[5px] flex-shrink-0 pl-3.5"
+            onMouseDown={(e) => e.stopPropagation()}
+          >
             <button
-              onMouseDown={(e) => e.stopPropagation()}
-              onClick={(e) => {
-                e.stopPropagation();
-                onFocus();
-                onMinimize();
-              }}
-              className="group flex h-[18px] w-[18px] items-center justify-center rounded-sm transition-colors duration-150 bg-[#1a2035] border border-[#2a3a5c] hover:bg-[#1e3a5f] hover:border-blue-500/60"
-              title="Minimize"
-            >
-              <Minus
-                size={8}
-                className="text-transparent group-hover:text-blue-400 transition-colors duration-150"
-              />
-            </button>
-            <button
-              onMouseDown={(e) => e.stopPropagation()}
-              onClick={(e) => {
-                e.stopPropagation();
-                onFocus();
-                onMaximize();
-              }}
-              className="group flex h-[18px] w-[18px] items-center justify-center rounded-sm transition-colors duration-150 bg-[#1a2035] border border-[#2a3a5c] hover:bg-[#1a3520] hover:border-emerald-500/60"
-              title="Maximize"
-            >
-              <Square
-                size={8}
-                className="text-transparent group-hover:text-emerald-400 transition-colors duration-150"
-              />
-            </button>
-            <button
-              onMouseDown={(e) => e.stopPropagation()}
-              onClick={(e) => {
-                e.stopPropagation();
-                onClose();
-              }}
-              className="group flex h-[18px] w-[18px] items-center justify-center rounded-sm transition-colors duration-150 bg-[#1a2035] border border-[#2a3a5c] hover:bg-[#3a1a1a] hover:border-red-500/60"
+              onClick={(e) => { e.stopPropagation(); onClose(); }}
+              className="group relative h-3 w-3 rounded-full flex items-center justify-center flex-shrink-0"
+              style={{ background: "#FF5F57" }}
               title="Close"
             >
-              <X
-                size={8}
-                className="text-transparent group-hover:text-red-400 transition-colors duration-150"
-              />
+              <span className="text-[8px] text-black/60 opacity-0 group-hover:opacity-100 transition-opacity leading-none select-none font-bold">×</span>
+            </button>
+            <button
+              onClick={(e) => { e.stopPropagation(); onFocus(); onMinimize(); }}
+              className="group relative h-3 w-3 rounded-full flex items-center justify-center flex-shrink-0"
+              style={{ background: "#FFBD2E" }}
+              title="Minimize"
+            >
+              <span className="text-[8px] text-black/60 opacity-0 group-hover:opacity-100 transition-opacity leading-none select-none font-bold">−</span>
+            </button>
+            <button
+              onClick={(e) => { e.stopPropagation(); onFocus(); onMaximize(); }}
+              className="group relative h-3 w-3 rounded-full flex items-center justify-center flex-shrink-0"
+              style={{ background: "#28C840" }}
+              title="Maximize"
+            >
+              <span className="text-[8px] text-black/60 opacity-0 group-hover:opacity-100 transition-opacity leading-none select-none font-bold">+</span>
             </button>
           </div>
+
+          {/* Title */}
+          <span
+            className="flex-1 text-[13px] tracking-[0.05em] uppercase truncate px-4"
+            style={{ color: "rgba(255,255,255,0.85)" }}
+          >
+            {win.title}
+          </span>
         </div>
 
         {/* Content */}

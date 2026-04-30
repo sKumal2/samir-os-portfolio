@@ -42,7 +42,7 @@ export function ContactWindow() {
       style={{ fontFamily: "var(--font-inter), sans-serif" }}
     >
       <p
-        className="text-[10px] text-zinc-600 mb-2 tracking-widest"
+        className="text-[10px] text-zinc-400 mb-2 tracking-widest"
         style={{ fontFamily: "var(--font-space-mono), monospace" }}
       >
         — reach out —
@@ -55,17 +55,17 @@ export function ContactWindow() {
           rel={
             c.href.startsWith("mailto") ? undefined : "noopener noreferrer"
           }
-          className="group flex items-center gap-4 px-5 py-3 rounded-lg border border-[#1f2937] bg-[#080d1a] w-full max-w-xs transition-all duration-200 hover:-translate-y-0.5 hover:border-blue-500/40 hover:bg-[#0a1220] hover:shadow-lg"
+          className="group flex items-center gap-4 px-5 py-3 rounded-lg border border-[#1e2a3a] bg-[#161b22] w-full max-w-xs transition-all duration-200 hover:-translate-y-0.5 hover:border-blue-500/40 hover:bg-[#1a2035] hover:shadow-lg"
         >
           <span className="text-zinc-500 group-hover:text-blue-400 transition-colors duration-150 flex-shrink-0">
             {c.icon}
           </span>
           <div className="min-w-0">
-            <p className="text-sm font-medium text-zinc-200 group-hover:text-white transition-colors duration-150">
+            <p className="text-[14px] font-medium text-zinc-200 group-hover:text-white transition-colors duration-150">
               {c.label}
             </p>
             <p
-              className="text-[10px] text-zinc-600 group-hover:text-zinc-500 transition-colors truncate"
+              className="text-[11px] text-zinc-500 group-hover:text-zinc-400 transition-colors truncate"
               style={{ fontFamily: "var(--font-space-mono), monospace" }}
             >
               {c.sub}

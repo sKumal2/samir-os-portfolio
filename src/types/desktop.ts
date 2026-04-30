@@ -1,4 +1,7 @@
-export type WindowType = 'about' | 'projects' | 'education' | 'skills' | 'experience' | 'contact';
+export type WindowType =
+  | 'about' | 'projects' | 'education' | 'skills' | 'experience' | 'contact'
+  | 'fun' | 'secret'
+  | 'project-fashion' | 'project-rag' | 'project-lesion';
 
 export interface WindowState {
   id: string;

@@ -25,20 +25,20 @@ export function ExperienceWindow() {
       className="p-5 space-y-6 samir-scroll h-full"
       style={{
         fontFamily: "var(--font-space-mono), monospace",
-        background: "#060b14",
+        background: "#0d1117",
       }}
     >
       {entries.map((entry) => (
         <div key={entry.timestamp} className="space-y-1">
           <div className="flex gap-3 items-start flex-wrap">
-            <span className="text-blue-400/80 text-[11px] flex-shrink-0">
+            <span className="text-blue-400 text-[11px] flex-shrink-0">
               {entry.timestamp}
             </span>
-            <span className="text-green-300/90 text-[11px]">{entry.role}</span>
+            <span className="text-green-400 text-[11px]">{entry.role}</span>
           </div>
           <div className="ml-[76px] space-y-0">
             {entry.lines.map((line, i) => (
-              <p key={i} className="text-zinc-400 text-[11px] leading-6">
+              <p key={i} className="text-[14px] text-[#e2e8f0] leading-6">
                 {line}
               </p>
             ))}

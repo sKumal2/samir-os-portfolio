@@ -37,7 +37,7 @@ export function SkillsWindow() {
         customStyle={{
           margin: 0,
           padding: "20px",
-          background: "#060b14",
+          background: "#0d1117",
           minHeight: "100%",
           fontSize: "12px",
           fontFamily: "var(--font-space-mono), monospace",

@@ -1,30 +1,58 @@
-import { Mail } from "lucide-react";
+"use client";
 
-const projects = [
+import { useState } from "react";
+import { Mail, ChevronDown } from "lucide-react";
+
+interface Project {
+  title: string;
+  date: string;
+  description: string;
+  stack: string[];
+  metrics: { value: string; label: string }[];
+}
+
+const projects: Project[] = [
   {
     title: "Multi-Agent Fashion Design Pipeline",
     date: "Nov 2025 – Present",
     description:
-      "Built end-to-end Python data pipelines for PostgreSQL, enabling 5× faster analytics. Orchestrated ETL on Google Cloud Run with multi-agent systems improving consistency by 40%.",
-    stack: ["Python", "PostgreSQL", "Docker", "Google Cloud Run", "ETL"],
+      "Built end-to-end Python data pipelines to extract, transform, and load structured and unstructured data into PostgreSQL, enabling 5× faster analytics. Orchestrated containerized ETL workflows on Google Cloud Run; integrated multi-agent systems improving data consistency by 40%.",
+    stack: ["Python", "PostgreSQL", "Docker", "Google Cloud Run", "ETL", "Multi-Agent Systems"],
+    metrics: [
+      { value: "5×",    label: "Faster Analytics" },
+      { value: "40%",   label: "Efficiency Gain" },
+      { value: "3",     label: "Agents" },
+    ],
   },
   {
     title: "RAG-Based Clinical Data Integration System",
     date: "Jan 2026 – Present",
     description:
-      "RAG architecture for WHO, CDC, and public health data. Achieved 10× query scalability and 35% better insight accuracy.",
-    stack: ["Python", "LangChain", "RAG", "Vector Databases"],
+      "Designed a RAG architecture ingesting data from WHO, CDC, and public health repositories. Built embedding, cleansing, and relevance-scoring pipelines achieving 10× query scalability and 35% better insight accuracy.",
+    stack: ["Python", "LangChain", "RAG", "Vector Databases", "Embeddings"],
+    metrics: [
+      { value: "10×",  label: "Query Scalability" },
+      { value: "35%",  label: "Accuracy Gain" },
+      { value: "3",    label: "Data Sources" },
+    ],
   },
   {
     title: "AI-Powered Skin Lesion Classification Pipeline",
     date: "Oct – Nov 2025",
     description:
-      "ML pipeline for 29K-image dataset. 92.6% F1-score; improved rare-class detection by 33%.",
-    stack: ["Python", "PyTorch", "Pandas", "NumPy"],
+      "Engineered a full ML pipeline for a 29K-image dataset using statistical sampling to improve rare-class detection by 33%. Achieved 92.6% F1-score using PyTorch and Pandas, optimized for low-latency inference.",
+    stack: ["Python", "PyTorch", "Pandas", "NumPy", "Statistical Sampling"],
+    metrics: [
+      { value: "92.6%", label: "F1-Score" },
+      { value: "33%",   label: "Rare-Class Gain" },
+      { value: "29K",   label: "Images" },
+    ],
   },
 ];
 
 export function MobileFallback() {
+  const [expanded, setExpanded] = useState<string | null>(null);
+
   return (
     <div
       className="min-h-screen bg-[#050810] text-white"
@@ -32,7 +60,7 @@ export function MobileFallback() {
     >
       {/* Desktop banner */}
       <div
-        className="sticky top-0 z-10 text-center py-2 text-[10px] tracking-wider text-blue-400/70 border-b border-[#1f2937] bg-[#050810]/95 backdrop-blur-sm"
+        className="sticky top-0 z-10 text-center py-2 text-[10px] tracking-wider text-red-400/70 border-b border-[#1f2937] bg-[#050810]/95 backdrop-blur-sm"
         style={{ fontFamily: "var(--font-space-mono), monospace" }}
       >
         SamirOS runs best on desktop
@@ -48,7 +76,7 @@ export function MobileFallback() {
             Samir Kumal
           </h1>
           <p
-            className="mt-2 text-xs text-blue-400"
+            className="mt-2 text-xs text-red-400"
             style={{ fontFamily: "var(--font-space-mono), monospace" }}
           >
             CS @ GSU &apos;28 · Data Engineering · ML · AI
@@ -71,38 +99,64 @@ export function MobileFallback() {
 
         <Section label="Projects">
           <div className="space-y-4">
-            {projects.map((p) => (
-              <div
-                key={p.title}
-                className="rounded-lg border border-[#1a2035] bg-[#080d1a] p-4 space-y-2"
-              >
-                <div>
-                  <h3 className="text-sm font-medium text-white">{p.title}</h3>
-                  <p
-                    className="text-[10px] text-blue-400/80 mt-0.5"
-                    style={{ fontFamily: "var(--font-space-mono), monospace" }}
+            {projects.map((p) => {
+              const isOpen = expanded === p.title;
+              return (
+                <div key={p.title} className="rounded-lg border border-[#200a0a] bg-[#080d1a] overflow-hidden">
+                  <button
+                    onClick={() => setExpanded(isOpen ? null : p.title)}
+                    className="w-full text-left p-4 flex items-start justify-between gap-3"
                   >
-                    {p.date}
-                  </p>
+                    <div>
+                      <h3 className="text-sm font-medium text-white">{p.title}</h3>
+                      <p
+                        className="text-[10px] text-red-400/80 mt-0.5"
+                        style={{ fontFamily: "var(--font-space-mono), monospace" }}
+                      >
+                        {p.date}
+                      </p>
+                    </div>
+                    <ChevronDown
+                      size={14}
+                      className={`text-zinc-500 flex-shrink-0 mt-1 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
+                    />
+                  </button>
+
+                  {isOpen && (
+                    <div className="px-4 pb-4 space-y-3 border-t border-[#200a0a]">
+                      {/* Metrics row */}
+                      <div className="grid grid-cols-3 gap-2 pt-3">
+                        {p.metrics.map((m) => (
+                          <div key={m.label} className="rounded bg-[#1a0808] border border-[#3a1212] p-2 text-center">
+                            <p
+                              className="text-sm font-bold text-red-400"
+                              style={{ fontFamily: "var(--font-space-mono), monospace" }}
+                            >
+                              {m.value}
+                            </p>
+                            <p className="text-[9px] text-zinc-500 mt-0.5">{m.label}</p>
+                          </div>
+                        ))}
+                      </div>
+
+                      <p className="text-xs text-zinc-400 leading-relaxed">{p.description}</p>
+
+                      <div className="flex flex-wrap gap-1.5">
+                        {p.stack.map((t) => (
+                          <span
+                            key={t}
+                            className="text-[10px] px-2 py-0.5 rounded bg-red-500/10 border border-red-500/20 text-red-300"
+                            style={{ fontFamily: "var(--font-space-mono), monospace" }}
+                          >
+                            {t}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
-                <p className="text-xs text-zinc-400 leading-relaxed">
-                  {p.description}
-                </p>
-                <div className="flex flex-wrap gap-1.5">
-                  {p.stack.map((t) => (
-                    <span
-                      key={t}
-                      className="text-[10px] px-2 py-0.5 rounded bg-blue-500/10 border border-blue-500/20 text-blue-300"
-                      style={{
-                        fontFamily: "var(--font-space-mono), monospace",
-                      }}
-                    >
-                      {t}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </Section>
 
@@ -112,7 +166,7 @@ export function MobileFallback() {
               Georgia State University
             </p>
             <p
-              className="text-blue-400/80 text-xs mt-1"
+              className="text-red-400/80 text-xs mt-1"
               style={{ fontFamily: "var(--font-space-mono), monospace" }}
             >
               B.S. Computer Science · Aug 2024 – May 2028
@@ -154,7 +208,7 @@ export function MobileFallback() {
                 Open Source Contributor — PyTorch Vision
               </p>
               <p
-                className="text-[10px] text-blue-400/80 mt-0.5"
+                className="text-[10px] text-red-400/80 mt-0.5"
                 style={{ fontFamily: "var(--font-space-mono), monospace" }}
               >
                 Jan 2026 · Remote
@@ -169,7 +223,7 @@ export function MobileFallback() {
                 Math Tutor — Gyaanshala
               </p>
               <p
-                className="text-[10px] text-blue-400/80 mt-0.5"
+                className="text-[10px] text-red-400/80 mt-0.5"
                 style={{ fontFamily: "var(--font-space-mono), monospace" }}
               >
                 Jun 2023 · Kathmandu, Nepal
@@ -203,7 +257,7 @@ export function MobileFallback() {
                     ? undefined
                     : "noopener noreferrer"
                 }
-                className="flex items-center gap-2 text-sm text-blue-400 hover:text-blue-300 transition-colors"
+                className="flex items-center gap-2 text-sm text-red-400 hover:text-red-300 transition-colors"
                 style={{ fontFamily: "var(--font-space-mono), monospace" }}
               >
                 <Mail className="h-3.5 w-3.5 flex-shrink-0" />

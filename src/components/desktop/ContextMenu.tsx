@@ -26,7 +26,7 @@ export function ContextMenu({ x, y, onRefresh, onAbout, onClose }: Props) {
   return (
     <div
       ref={ref}
-      className="fixed z-[9990] w-52 overflow-hidden rounded border border-[#1f2937] bg-[#08101f]/95 backdrop-blur-xl py-1 shadow-2xl"
+      className="fixed z-[9990] w-52 overflow-hidden rounded border border-[#1e2a3a] bg-[#0d1117]/97 backdrop-blur-xl py-1 shadow-2xl"
       style={{ left: x, top: y, fontFamily: "var(--font-space-mono), monospace" }}
     >
       <button
@@ -34,17 +34,17 @@ export function ContextMenu({ x, y, onRefresh, onAbout, onClose }: Props) {
           onRefresh();
           onClose();
         }}
-        className="w-full px-4 py-2 text-left text-[11px] text-zinc-400 hover:bg-blue-500/10 hover:text-blue-300 transition-colors duration-100"
+        className="w-full px-4 py-2 text-left text-[11px] text-zinc-300 hover:bg-blue-500/10 hover:text-blue-300 transition-colors duration-100"
       >
         Refresh Desktop
       </button>
-      <div className="mx-3 my-1 h-px bg-[#1f2937]" />
+      <div className="mx-3 my-1 h-px bg-[#1e2a3a]" />
       <button
         onClick={() => {
           onAbout();
           onClose();
         }}
-        className="w-full px-4 py-2 text-left text-[11px] text-zinc-400 hover:bg-blue-500/10 hover:text-blue-300 transition-colors duration-100"
+        className="w-full px-4 py-2 text-left text-[11px] text-zinc-300 hover:bg-blue-500/10 hover:text-blue-300 transition-colors duration-100"
       >
         About SamirOS
       </button>

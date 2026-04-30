@@ -8,7 +8,7 @@ import type { WindowState, WindowType } from "@/types/desktop";
 
 const WINDOW_DEFAULTS: Record<
   WindowType,
-  { title: string; w: number; h: number }
+  { title: string; w: number; h: number; center?: boolean }
 > = {
   about:      { title: "About Samir",    w: 520, h: 420 },
   projects:   { title: "Projects",       w: 640, h: 530 },
@@ -16,6 +16,11 @@ const WINDOW_DEFAULTS: Record<
   skills:     { title: "skills.json",    w: 600, h: 460 },
   experience: { title: "experience.log", w: 580, h: 400 },
   contact:    { title: "Contact",        w: 420, h: 340 },
+  fun:        { title: "fun/",           w: 400, h: 320 },
+  secret:     { title: "secret.exe",     w: 460, h: 340 },
+  "project-fashion": { title: "multi-agent-fashion-pipeline.exe", w: 720, h: 520, center: true },
+  "project-rag":     { title: "rag-clinical-system.exe",          w: 720, h: 520, center: true },
+  "project-lesion":  { title: "skin-lesion-classifier.exe",       w: 720, h: 520, center: true },
 };
 
 let winIdSeq = 1;
@@ -46,6 +51,10 @@ export default function Home() {
     const offset = (windows.length % 10) * 22;
     const id = `w-${winIdSeq++}`;
     const newZ = bumpZ();
+    const vpW = typeof window !== "undefined" ? window.innerWidth : 1440;
+    const vpH = typeof window !== "undefined" ? window.innerHeight - 48 : 900;
+    const x = def.center ? Math.max(0, (vpW - def.w) / 2) : 120 + offset;
+    const y = def.center ? Math.max(0, (vpH - def.h) / 2) : 70 + offset;
     setFocusedId(id);
     setWindows((prev) => [
       ...prev,
@@ -56,8 +65,8 @@ export default function Home() {
         zIndex: newZ,
         isMinimized: false,
         isMaximized: false,
-        x: 120 + offset,
-        y: 70 + offset,
+        x,
+        y,
         width: def.w,
         height: def.h,
       },

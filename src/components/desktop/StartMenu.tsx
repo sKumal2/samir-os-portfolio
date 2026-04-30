@@ -181,7 +181,7 @@ export function StartMenu({ onOpenWindow, onClose }: Props) {
           onClick={(e) => e.stopPropagation()}
         >
           <FileText size={11} />
-          RESUME
+          MAIL
         </a>
       </div>
     </motion.div>

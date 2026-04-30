@@ -1,6 +1,6 @@
 export type WindowType =
   | 'about' | 'projects' | 'education' | 'skills' | 'experience' | 'contact'
-  | 'fun' | 'secret'
+  | 'fun' | 'secret' | 'terminal'
   | 'project-fashion' | 'project-rag' | 'project-lesion';
 
 export interface WindowState {

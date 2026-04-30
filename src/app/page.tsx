@@ -18,6 +18,7 @@ const WINDOW_DEFAULTS: Record<
   contact:    { title: "Contact",        w: 420, h: 340 },
   fun:        { title: "fun/",           w: 400, h: 320 },
   secret:     { title: "secret.exe",     w: 460, h: 340 },
+  terminal:   { title: "terminal.exe",   w: 640, h: 400 },
   "project-fashion": { title: "multi-agent-fashion-pipeline.exe", w: 720, h: 520, center: true },
   "project-rag":     { title: "rag-clinical-system.exe",          w: 720, h: 520, center: true },
   "project-lesion":  { title: "skin-lesion-classifier.exe",       w: 720, h: 520, center: true },

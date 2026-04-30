@@ -11,6 +11,7 @@ import {
   Mail,
   Gamepad2,
   Lock,
+  Terminal,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import type { WindowState, WindowType } from "@/types/desktop";
@@ -30,6 +31,7 @@ import { SecretWindow } from "@/components/windows/SecretWindow";
 import { ProjectFashionWindow } from "@/components/windows/ProjectFashionWindow";
 import { ProjectRagWindow } from "@/components/windows/ProjectRagWindow";
 import { ProjectLesionWindow } from "@/components/windows/ProjectLesionWindow";
+import { TerminalWindow } from "@/components/windows/TerminalWindow";
 
 interface IconDef {
   type: WindowType;
@@ -46,6 +48,7 @@ const ICONS: IconDef[] = [
   { type: "contact",    icon: Mail,         label: "contact.lnk"   },
   { type: "fun",        icon: Gamepad2,     label: "fun/"          },
   { type: "secret",     icon: Lock,         label: "secret.exe"    },
+  { type: "terminal",   icon: Terminal,     label: "terminal.exe"  },
 ];
 
 const ICON_INIT: Record<string, { x: number; y: number }> = {
@@ -57,6 +60,7 @@ const ICON_INIT: Record<string, { x: number; y: number }> = {
   contact:    { x: 114, y: 236 },
   fun:        { x: 24,  y: 342 },
   secret:     { x: 114, y: 342 },
+  terminal:   { x: 24,  y: 448 },
 };
 
 function renderWindowContent(type: WindowType, onOpenWindow: (t: WindowType) => void) {
@@ -69,6 +73,7 @@ function renderWindowContent(type: WindowType, onOpenWindow: (t: WindowType) => 
     case "contact":          return <ContactWindow />;
     case "fun":              return <FunWindow />;
     case "secret":           return <SecretWindow />;
+    case "terminal":         return <TerminalWindow onOpenWindow={onOpenWindow} />;
     case "project-fashion":  return <ProjectFashionWindow />;
     case "project-rag":      return <ProjectRagWindow />;
     case "project-lesion":   return <ProjectLesionWindow />;

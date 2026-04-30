@@ -58,7 +58,7 @@ export function BootScreen({ onComplete }: Props) {
           <h1 className="text-5xl font-bold tracking-[0.15em] text-white">
             SAMIR OS
           </h1>
-          <p className="mt-2 text-sm tracking-[0.4em] text-red-400/80">v1.0</p>
+          <p className="mt-2 text-sm tracking-[0.4em] text-red-400/80">v1.1</p>
         </div>
 
         <div className="w-72">

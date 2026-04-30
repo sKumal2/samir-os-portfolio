@@ -12,10 +12,13 @@ import {
   Gamepad2,
   Lock,
   Terminal,
+  Monitor,
+  Trash2,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import type { WindowState, WindowType } from "@/types/desktop";
 import { DesktopIcon } from "./DesktopIcon";
+import { DesktopClock } from "./DesktopClock";
 import { Window } from "./Window";
 import { Taskbar } from "./Taskbar";
 import { ContextMenu } from "./ContextMenu";
@@ -32,6 +35,8 @@ import { ProjectFashionWindow } from "@/components/windows/ProjectFashionWindow"
 import { ProjectRagWindow } from "@/components/windows/ProjectRagWindow";
 import { ProjectLesionWindow } from "@/components/windows/ProjectLesionWindow";
 import { TerminalWindow } from "@/components/windows/TerminalWindow";
+import { MyComputerWindow } from "@/components/windows/MyComputerWindow";
+import { RecycleBinWindow, type BinItem } from "@/components/windows/RecycleBinWindow";
 
 interface IconDef {
   type: WindowType;
@@ -40,43 +45,55 @@ interface IconDef {
 }
 
 const ICONS: IconDef[] = [
-  { type: "about",      icon: User,         label: "about.exe"     },
-  { type: "projects",   icon: FolderOpen,   label: "projects/"     },
-  { type: "education",  icon: GraduationCap,label: "education.txt" },
-  { type: "skills",     icon: Code2,        label: "skills.json"   },
-  { type: "experience", icon: Briefcase,    label: "experience.log"},
-  { type: "contact",    icon: Mail,         label: "contact.lnk"   },
-  { type: "fun",        icon: Gamepad2,     label: "fun/"          },
-  { type: "secret",     icon: Lock,         label: "secret.exe"    },
-  { type: "terminal",   icon: Terminal,     label: "terminal.exe"  },
+  { type: "about",       icon: User,          label: "about.exe"     },
+  { type: "projects",    icon: FolderOpen,    label: "projects/"     },
+  { type: "education",   icon: GraduationCap, label: "education.txt" },
+  { type: "skills",      icon: Code2,         label: "skills.json"   },
+  { type: "experience",  icon: Briefcase,     label: "experience.log"},
+  { type: "contact",     icon: Mail,          label: "contact.lnk"   },
+  { type: "fun",         icon: Gamepad2,      label: "fun/"          },
+  { type: "secret",      icon: Lock,          label: "secret.exe"    },
+  { type: "terminal",    icon: Terminal,      label: "terminal.exe"  },
+  { type: "mypc",        icon: Monitor,       label: "mypc/"         },
+  { type: "recycle-bin", icon: Trash2,        label: "recycle-bin/"  },
 ];
 
 const ICON_INIT: Record<string, { x: number; y: number }> = {
-  about:      { x: 24,  y: 24  },
-  projects:   { x: 114, y: 24  },
-  education:  { x: 24,  y: 130 },
-  skills:     { x: 114, y: 130 },
-  experience: { x: 24,  y: 236 },
-  contact:    { x: 114, y: 236 },
-  fun:        { x: 24,  y: 342 },
-  secret:     { x: 114, y: 342 },
-  terminal:   { x: 24,  y: 448 },
+  about:         { x: 24,  y: 24  },
+  projects:      { x: 114, y: 24  },
+  education:     { x: 24,  y: 130 },
+  skills:        { x: 114, y: 130 },
+  experience:    { x: 24,  y: 236 },
+  contact:       { x: 114, y: 236 },
+  fun:           { x: 24,  y: 342 },
+  secret:        { x: 114, y: 342 },
+  terminal:      { x: 24,  y: 448 },
+  mypc:          { x: 114, y: 448 },
+  "recycle-bin": { x: 24,  y: 554 },
 };
 
-function renderWindowContent(type: WindowType, onOpenWindow: (t: WindowType) => void) {
+function renderWindowContent(
+  type: WindowType,
+  onOpenWindow: (t: WindowType) => void,
+  binItems: BinItem[],
+  onRestore: (t: WindowType) => void,
+  onEmpty: () => void,
+) {
   switch (type) {
-    case "about":            return <AboutWindow />;
-    case "projects":         return <ProjectsWindow onOpenWindow={onOpenWindow} />;
-    case "education":        return <EducationWindow />;
-    case "skills":           return <SkillsWindow />;
-    case "experience":       return <ExperienceWindow />;
-    case "contact":          return <ContactWindow />;
-    case "fun":              return <FunWindow />;
-    case "secret":           return <SecretWindow />;
-    case "terminal":         return <TerminalWindow onOpenWindow={onOpenWindow} />;
-    case "project-fashion":  return <ProjectFashionWindow />;
-    case "project-rag":      return <ProjectRagWindow />;
-    case "project-lesion":   return <ProjectLesionWindow />;
+    case "about":           return <AboutWindow />;
+    case "projects":        return <ProjectsWindow onOpenWindow={onOpenWindow} />;
+    case "education":       return <EducationWindow />;
+    case "skills":          return <SkillsWindow />;
+    case "experience":      return <ExperienceWindow />;
+    case "contact":         return <ContactWindow />;
+    case "fun":             return <FunWindow />;
+    case "secret":          return <SecretWindow />;
+    case "terminal":        return <TerminalWindow onOpenWindow={onOpenWindow} />;
+    case "mypc":            return <MyComputerWindow onOpenWindow={onOpenWindow} />;
+    case "recycle-bin":     return <RecycleBinWindow items={binItems} onRestore={onRestore} onEmpty={onEmpty} />;
+    case "project-fashion": return <ProjectFashionWindow />;
+    case "project-rag":     return <ProjectRagWindow />;
+    case "project-lesion":  return <ProjectLesionWindow />;
   }
 }
 
@@ -109,27 +126,66 @@ export function Desktop({
   const [aboutDialog, setAboutDialog] = useState(false);
   const [iconPos, setIconPos] = useState<Record<string, { x: number; y: number }>>(ICON_INIT);
   const [startOpen, setStartOpen] = useState(false);
+  const [deletedIcons, setDeletedIcons] = useState<WindowType[]>([]);
+  const [iconCtxMenu, setIconCtxMenu] = useState<
+    { x: number; y: number; type: WindowType } | null
+  >(null);
 
   const handleContextMenu = (e: React.MouseEvent) => {
     const target = e.target as HTMLElement;
     if (target.closest("[data-window]")) return;
+    if (target.closest("[data-icon]")) return;
     e.preventDefault();
     setCtxMenu({ x: e.clientX, y: e.clientY });
   };
 
+  const handleIconContextMenu = (e: React.MouseEvent, type: WindowType) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setCtxMenu(null);
+    setIconCtxMenu({ x: e.clientX, y: e.clientY, type });
+  };
+
+  const deleteIcon = (type: WindowType) => {
+    if (type === "recycle-bin") return;
+    setDeletedIcons((prev) => (prev.includes(type) ? prev : [...prev, type]));
+  };
+
+  const restoreIcon = (type: WindowType) => {
+    setDeletedIcons((prev) => prev.filter((t) => t !== type));
+  };
+
+  const emptyBin = () => setDeletedIcons([]);
+
+  const visibleIcons = ICONS.filter((d) => !deletedIcons.includes(d.type));
+  const binItems: BinItem[] = deletedIcons
+    .map((t) => ICONS.find((i) => i.type === t))
+    .filter((i): i is IconDef => !!i)
+    .map((i) => ({ type: i.type, icon: i.icon, label: i.label }));
+  const recycleHasItems = deletedIcons.length > 0;
+
   return (
     <div
       className="relative h-full overflow-hidden select-none"
-      style={{ background: "#0a0f1a" }}
+      style={{ background: "var(--bg-desktop)" }}
       onContextMenu={handleContextMenu}
-      onClick={() => { setCtxMenu(null); setStartOpen(false); }}
+      onClick={() => { setCtxMenu(null); setIconCtxMenu(null); setStartOpen(false); }}
     >
-      {/* HUD grid */}
-      <div className="hud-grid absolute inset-0 pointer-events-none" style={{ zIndex: 1 }} />
+      {/* Wallpaper photo (light mode only) */}
+      <div className="desktop-wallpaper" aria-hidden />
 
-      {/* Arc reactor — centered, behind everything */}
+      {/* Theme overlay */}
       <div
-        className="arc-reactor-wrap absolute inset-0 pointer-events-none flex items-center justify-center"
+        className="absolute inset-0 pointer-events-none"
+        style={{ background: "var(--bg-overlay)", zIndex: 0 }}
+      />
+
+      {/* HUD grid (dark/Stark only) */}
+      <div className="hud-grid stark-only absolute inset-0 pointer-events-none" style={{ zIndex: 1 }} />
+
+      {/* Arc reactor (dark/Stark only) */}
+      <div
+        className="arc-reactor-wrap stark-only absolute inset-0 pointer-events-none flex items-center justify-center"
         style={{ zIndex: 2 }}
       >
         <svg
@@ -141,70 +197,44 @@ export function Desktop({
               "drop-shadow(0 0 18px rgba(239,68,68,0.65)) drop-shadow(0 0 55px rgba(239,68,68,0.25))",
           }}
         >
-          {/* Outermost ambient ring */}
           <circle cx="150" cy="150" r="143" fill="none" stroke="#EF4444" strokeWidth="0.5" opacity="0.12" />
-
-          {/* Outer structural ring */}
           <circle cx="150" cy="150" r="128" fill="none" stroke="#EF4444" strokeWidth="1" opacity="0.22" />
-
-          {/* Dashed segmented ring */}
           <circle cx="150" cy="150" r="114" fill="none" stroke="#F87171" strokeWidth="1" strokeDasharray="9 5" opacity="0.28" />
-
-          {/* 6 rectangular capacitor pods at r=85–108, rotated 60° apart */}
           {[0, 60, 120, 180, 240, 300].map((deg) => (
-            <rect
-              key={deg}
-              x={144} y={42} width={12} height={23} rx={2}
+            <rect key={deg} x={144} y={42} width={12} height={23} rx={2}
               fill="#1a0505" stroke="#EF4444" strokeWidth={1} opacity={0.7}
-              transform={`rotate(${deg}, 150, 150)`}
-            />
+              transform={`rotate(${deg}, 150, 150)`} />
           ))}
-
-          {/* Small tick marks between pods at r=72–80 */}
           {[30, 90, 150, 210, 270, 330].map((deg) => (
-            <rect
-              key={deg}
-              x={147} y={70} width={6} height={8} rx={1}
+            <rect key={deg} x={147} y={70} width={6} height={8} rx={1}
               fill="#EF4444" opacity={0.45}
-              transform={`rotate(${deg}, 150, 150)`}
-            />
+              transform={`rotate(${deg}, 150, 150)`} />
           ))}
-
-          {/* Inner structural ring */}
           <circle cx="150" cy="150" r="78" fill="none" stroke="#F87171" strokeWidth="1.5" opacity="0.38" />
-
-          {/* Secondary inner ring */}
           <circle cx="150" cy="150" r="60" fill="none" stroke="#EF4444" strokeWidth="1" opacity="0.25" />
-
-          {/* Core shell */}
           <circle cx="150" cy="150" r="44" fill="#0d0505" stroke="#F87171" strokeWidth="1.5" opacity="0.9" />
-
-          {/* Bright inner ring */}
           <circle cx="150" cy="150" r="30" fill="none" stroke="#FCA5A5" strokeWidth="2" opacity="0.75" />
-
-          {/* Inner core fill */}
           <circle cx="150" cy="150" r="22" fill="#1a0808" stroke="#FECACA" strokeWidth="1" opacity="0.85" />
-
-          {/* Center glow */}
           <circle cx="150" cy="150" r="13" fill="#F87171" opacity="0.88" />
-
-          {/* Bright center dot */}
           <circle cx="150" cy="150" r="7" fill="white" opacity="0.95" />
         </svg>
       </div>
 
-      {/* Conky-style OS label — top left */}
+      {/* Conky-style OS label (dark/Stark only) */}
       <div
-        className="absolute top-3 left-4 pointer-events-none"
+        className="stark-only absolute top-3 left-4 pointer-events-none"
         style={{ zIndex: 3, fontFamily: "var(--font-space-mono), monospace" }}
       >
         <span style={{ fontSize: "10px", color: "rgba(239,68,68,0.30)", letterSpacing: "0.18em" }}>
-          SAMIR-OS v1.0 // STARK INTERFACE
+          SAMIR-OS v1.1 // STARK INTERFACE
         </span>
       </div>
 
+      {/* Live clock widget */}
+      <DesktopClock />
+
       {/* Draggable desktop icons */}
-      {ICONS.map((def) => (
+      {visibleIcons.map((def) => (
         <Rnd
           key={def.type}
           size={{ width: 88, height: 96 }}
@@ -216,21 +246,44 @@ export function Desktop({
           bounds="parent"
           style={{ zIndex: 10 }}
         >
-          <DesktopIcon
-            icon={def.icon}
-            label={def.label}
-            onDoubleClick={() => onOpenWindow(def.type)}
-          />
+          <div
+            data-icon="true"
+            className="relative w-full h-full"
+            onContextMenu={(e) => handleIconContextMenu(e, def.type)}
+          >
+            <DesktopIcon
+              icon={def.icon}
+              label={def.label}
+              onDoubleClick={() => onOpenWindow(def.type)}
+            />
+            {def.type === "recycle-bin" && recycleHasItems && (
+              <span
+                aria-hidden
+                style={{
+                  position: "absolute",
+                  top: 8,
+                  right: 18,
+                  width: 8,
+                  height: 8,
+                  borderRadius: 9999,
+                  background: "#3B82F6",
+                  boxShadow: "0 0 6px rgba(59,130,246,0.9)",
+                  pointerEvents: "none",
+                }}
+              />
+            )}
+          </div>
         </Rnd>
       ))}
 
-      {/* Windows container — bounded above taskbar. No display:contents wrapper so bounds="parent" resolves correctly */}
+      {/* Windows container */}
       <div className="absolute inset-0 bottom-12">
         {windows.map((win) => (
           <Window
             key={win.id}
             win={win}
             isFocused={focusedId === win.id}
+            isTerminal={win.type === "terminal"}
             onFocus={() => onFocusWindow(win.id)}
             onMinimize={() => onMinimizeWindow(win.id)}
             onMaximize={() => onMaximizeWindow(win.id)}
@@ -238,7 +291,7 @@ export function Desktop({
             onMove={(x, y) => onMoveWindow(win.id, x, y)}
             onResize={(w, h, x, y) => onResizeWindow(win.id, w, h, x, y)}
           >
-            {renderWindowContent(win.type, onOpenWindow)}
+            {renderWindowContent(win.type, onOpenWindow, binItems, restoreIcon, emptyBin)}
           </Window>
         ))}
       </div>
@@ -259,7 +312,7 @@ export function Desktop({
         onToggleStart={(e) => { e.stopPropagation(); setStartOpen((v) => !v); }}
       />
 
-      {/* Right-click context menu */}
+      {/* Desktop right-click context menu */}
       {ctxMenu && (
         <ContextMenu
           x={ctxMenu.x}
@@ -268,6 +321,54 @@ export function Desktop({
           onAbout={() => setAboutDialog(true)}
           onClose={() => setCtxMenu(null)}
         />
+      )}
+
+      {/* Icon right-click context menu */}
+      {iconCtxMenu && (
+        <div
+          className="fixed rounded-md border shadow-2xl py-1"
+          style={{
+            left: iconCtxMenu.x,
+            top: iconCtxMenu.y,
+            zIndex: 9990,
+            minWidth: 140,
+            background: "var(--bg-ctxmenu)",
+            borderColor: "var(--border-ctxmenu)",
+            color: "var(--text-ctxmenu)",
+            fontFamily: "var(--font-space-mono), monospace",
+            fontSize: 12,
+            backdropFilter: "blur(12px)",
+          }}
+          onClick={(e) => e.stopPropagation()}
+          onContextMenu={(e) => e.preventDefault()}
+        >
+          <button
+            className="w-full text-left px-3 py-1.5 transition-colors"
+            style={{ color: "var(--text-ctxmenu)" }}
+            onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = "var(--bg-ctxmenu-hover)"; }}
+            onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = "transparent"; }}
+            onClick={() => { onOpenWindow(iconCtxMenu.type); setIconCtxMenu(null); }}
+          >
+            Open
+          </button>
+          {iconCtxMenu.type !== "recycle-bin" && (
+            <button
+              className="w-full text-left px-3 py-1.5 transition-colors"
+              style={{ color: "var(--text-ctxmenu)" }}
+              onMouseEnter={(e) => {
+                (e.currentTarget as HTMLElement).style.background = "rgba(239,68,68,0.15)";
+                (e.currentTarget as HTMLElement).style.color = "#dc2626";
+              }}
+              onMouseLeave={(e) => {
+                (e.currentTarget as HTMLElement).style.background = "transparent";
+                (e.currentTarget as HTMLElement).style.color = "var(--text-ctxmenu)";
+              }}
+              onClick={() => { deleteIcon(iconCtxMenu.type); setIconCtxMenu(null); }}
+            >
+              Delete
+            </button>
+          )}
+        </div>
       )}
 
       {/* About SamirOS dialog */}
@@ -282,7 +383,7 @@ export function Desktop({
             onClick={(e) => e.stopPropagation()}
           >
             <p className="text-xl font-bold text-white tracking-[0.2em]">SAMIR OS</p>
-            <p className="text-xs text-blue-400/80 mt-1 tracking-[0.4em]">v1.0</p>
+            <p className="text-xs text-blue-400/80 mt-1 tracking-[0.4em]">v1.1</p>
             <div className="my-4 h-px bg-[#1e2a3a]" />
             <p className="text-xs text-zinc-300">© Samir Kumal 2026</p>
             <button

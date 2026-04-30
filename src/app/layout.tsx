@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Space_Mono, Inter } from "next/font/google";
+import { ThemeProvider } from "@/contexts/ThemeContext";
 import "./globals.css";
 
 const spaceMono = Space_Mono({
@@ -16,10 +17,22 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "SamirOS v1.0",
+  title: "SamirOS v1.1",
   description:
     "Samir Kumal — CS @ Georgia State University | Data Engineering · ML · AI Systems",
 };
+
+const themeBootScript = `
+(function () {
+  try {
+    var t = localStorage.getItem('samiros-theme');
+    if (t !== 'light' && t !== 'dark') t = 'dark';
+    document.documentElement.setAttribute('data-theme', t);
+  } catch (e) {
+    document.documentElement.setAttribute('data-theme', 'dark');
+  }
+})();
+`;
 
 export default function RootLayout({
   children,
@@ -28,8 +41,15 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${spaceMono.variable} ${inter.variable} h-full`}
+      data-theme="dark"
+      suppressHydrationWarning
     >
-      <body className="h-full overflow-hidden bg-[#050810]">{children}</body>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeBootScript }} />
+      </head>
+      <body className="h-full overflow-hidden bg-[#050810]">
+        <ThemeProvider>{children}</ThemeProvider>
+      </body>
     </html>
   );
 }

@@ -22,6 +22,8 @@ const WINDOW_DEFAULTS: Record<
   "project-fashion": { title: "multi-agent-fashion-pipeline.exe", w: 720, h: 520, center: true },
   "project-rag":     { title: "rag-clinical-system.exe",          w: 720, h: 520, center: true },
   "project-lesion":  { title: "skin-lesion-classifier.exe",       w: 720, h: 520, center: true },
+  "mypc":            { title: "My Computer",                      w: 620, h: 460 },
+  "recycle-bin":     { title: "Recycle Bin",                      w: 480, h: 360 },
 };
 
 let winIdSeq = 1;

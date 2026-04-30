@@ -8,6 +8,7 @@ interface Props {
   win: WindowState;
   isFocused: boolean;
   children: React.ReactNode;
+  isTerminal?: boolean;
   onFocus: () => void;
   onMinimize: () => void;
   onMaximize: () => void;
@@ -20,6 +21,7 @@ export function Window({
   win,
   isFocused,
   children,
+  isTerminal,
   onFocus,
   onMinimize,
   onMaximize,
@@ -63,26 +65,32 @@ export function Window({
       <motion.div
         key={win.id}
         data-window="true"
+        data-terminal-window={isTerminal ? "true" : undefined}
         initial={{ opacity: 0, scale: 0.93 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.18, ease: "easeOut" }}
         className="flex flex-col h-full rounded-lg overflow-hidden"
         style={{
-          background: "#0d1117",
-          border: isFocused
-            ? "1px solid rgba(59,130,246,0.7)"
-            : "1px solid rgba(59,130,246,0.35)",
+          background: "var(--bg-window)",
+          backdropFilter: "var(--backdrop-window)",
+          WebkitBackdropFilter: "var(--backdrop-window)",
+          border: `1px solid ${
+            isFocused
+              ? "var(--border-window-focus)"
+              : "var(--border-window)"
+          }`,
           boxShadow: isFocused
-            ? "0 24px 80px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.04), 0 0 30px rgba(59,130,246,0.08)"
-            : "0 24px 80px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.04)",
+            ? "var(--shadow-window-focus)"
+            : "var(--shadow-window)",
+          color: "var(--text-body)",
         }}
       >
         {/* Title bar — macOS style: controls LEFT, title right */}
         <div
           className="window-drag-handle flex h-10 items-center select-none flex-shrink-0 cursor-grab active:cursor-grabbing"
           style={{
-            backgroundColor: "#161b22",
-            borderBottom: "1px solid rgba(255,255,255,0.08)",
+            backgroundColor: "var(--bg-titlebar)",
+            borderBottom: "1px solid var(--border-titlebar)",
             fontFamily: "var(--font-space-mono), monospace",
           }}
         >
@@ -120,7 +128,7 @@ export function Window({
           {/* Title */}
           <span
             className="flex-1 text-[13px] tracking-[0.05em] uppercase truncate px-4"
-            style={{ color: "rgba(255,255,255,0.85)" }}
+            style={{ color: "var(--text-window-title)" }}
           >
             {win.title}
           </span>

@@ -13,7 +13,193 @@ body {
   overflow: hidden;
 }
 
-/* Custom scrollbars for window content */
+/* ─────────────────────────────────────────
+   Theme variables
+   ───────────────────────────────────────── */
+:root,
+[data-theme="dark"] {
+  /* Wallpaper / desktop */
+  --bg-desktop:           #0a0f1a;
+  --wallpaper-img:        none;
+  --bg-overlay:           rgba(0,0,0,0.25);
+  --display-stark:        block;
+
+  /* Windows */
+  --bg-window:            rgba(15,17,26,0.72);
+  --border-window:        rgba(255,255,255,0.10);
+  --border-window-focus:  rgba(59,130,246,0.7);
+  --shadow-window:        0 24px 80px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.04);
+  --shadow-window-focus:  0 24px 80px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.04), 0 0 30px rgba(59,130,246,0.10);
+  --backdrop-window:      blur(24px) saturate(160%);
+
+  /* Title bar */
+  --bg-titlebar:          rgba(0,0,0,0.25);
+  --border-titlebar:      rgba(255,255,255,0.08);
+  --text-window-title:    rgba(255,255,255,0.85);
+
+  /* Body text */
+  --text-body:            #e2e8f0;
+
+  /* Taskbar */
+  --bg-taskbar:           rgba(10,15,26,0.85);
+  --border-taskbar:       rgba(59,130,246,0.20);
+  --text-taskbar:         rgba(255,255,255,0.80);
+  --text-taskbar-muted:   rgba(255,255,255,0.45);
+  --bg-tb-active:         rgba(255,255,255,0.06);
+  --border-tb-active:     rgba(255,255,255,0.08);
+  --bg-tb-inactive:       rgba(255,255,255,0.04);
+  --bg-start:             rgba(59,130,246,0.15);
+  --border-start:         rgba(59,130,246,0.40);
+  --bg-start-open:        rgba(59,130,246,0.30);
+  --bg-start-hover:       rgba(59,130,246,0.25);
+  --bg-toggle-hover:      rgba(59,130,246,0.20);
+
+  /* Desktop icons */
+  --bg-icon-tile:         rgba(255,255,255,0.07);
+  --border-icon-tile:     rgba(255,255,255,0.12);
+  --shadow-icon-tile:     0 4px 24px rgba(0,0,0,0.35);
+  --bg-icon-tile-hover:   rgba(59,130,246,0.25);
+  --border-icon-tile-hover: #3B82F6;
+  --color-icon-glyph:     #ffffff;
+  --text-icon-label:      rgba(255,255,255,0.90);
+  --shadow-icon-label:    0 1px 4px rgba(0,0,0,0.8);
+
+  /* Window content accents */
+  --pill-bg:              rgba(59,130,246,0.12);
+  --pill-border:          rgba(59,130,246,0.30);
+  --pill-text:            #93c5fd;
+  --heading:              #93c5fd;
+  --metric:               #ffffff;
+
+  /* Clock widget */
+  --clock-time:           #ffffff;
+  --clock-secondary:      rgba(255,255,255,0.60);
+  --clock-accent:         rgba(59,130,246,0.50);
+  --shadow-clock:         0 2px 12px rgba(0,0,0,0.8);
+
+  /* Start menu */
+  --bg-startmenu:         rgba(10,15,26,0.92);
+  --border-startmenu:     rgba(59,130,246,0.25);
+  --shadow-startmenu:     0 -8px 40px rgba(0,0,0,0.60);
+  --text-startmenu:       #e2e8f0;
+  --bg-search:            #161b22;
+  --border-search:        rgba(255,255,255,0.10);
+  --text-search:          #e2e8f0;
+  --text-search-placeholder: rgba(255,255,255,0.40);
+  --bg-pwr:               transparent;
+  --bg-pwr-hover:         rgba(59,130,246,0.10);
+  --text-pwr:             rgba(255,255,255,0.70);
+  --text-applabel:        rgba(255,255,255,0.55);
+
+  /* Context menu */
+  --bg-ctxmenu:           #0d1117;
+  --border-ctxmenu:       #1e2a3a;
+  --text-ctxmenu:         #e2e8f0;
+  --bg-ctxmenu-hover:     rgba(59,130,246,0.10);
+
+  /* Scrollbar */
+  --scrollbar-thumb:      rgba(59,130,246,0.40);
+  --scrollbar-thumb-hover: rgba(59,130,246,0.70);
+}
+
+[data-theme="light"] {
+  /* Wallpaper / desktop */
+  --bg-desktop:           #cbd5e1;
+  --wallpaper-img:        url("https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1920&q=90");
+  --bg-overlay:           rgba(255,255,255,0.10);
+  --display-stark:        none;
+
+  /* Windows */
+  --bg-window:            rgba(248,250,252,0.88);
+  --border-window:        rgba(0,0,0,0.08);
+  --border-window-focus:  rgba(59,130,246,0.55);
+  --shadow-window:        0 32px 80px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.9);
+  --shadow-window-focus:  0 32px 80px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.9), 0 0 0 1px rgba(59,130,246,0.20);
+  --backdrop-window:      blur(24px) saturate(160%);
+
+  /* Title bar */
+  --bg-titlebar:          rgba(241,245,249,0.95);
+  --border-titlebar:      rgba(0,0,0,0.06);
+  --text-window-title:    #0f172a;
+
+  /* Body text */
+  --text-body:            #1e293b;
+
+  /* Taskbar */
+  --bg-taskbar:           rgba(255,255,255,0.80);
+  --border-taskbar:       rgba(0,0,0,0.08);
+  --text-taskbar:         #1e293b;
+  --text-taskbar-muted:   rgba(30,41,59,0.55);
+  --bg-tb-active:         rgba(59,130,246,0.12);
+  --border-tb-active:     rgba(59,130,246,0.30);
+  --bg-tb-inactive:       rgba(0,0,0,0.04);
+  --bg-start:             rgba(59,130,246,0.10);
+  --border-start:         rgba(59,130,246,0.30);
+  --bg-start-open:        rgba(59,130,246,0.30);
+  --bg-start-hover:       rgba(59,130,246,0.20);
+  --bg-toggle-hover:      rgba(59,130,246,0.20);
+
+  /* Desktop icons */
+  --bg-icon-tile:         rgba(255,255,255,0.75);
+  --border-icon-tile:     rgba(0,0,0,0.10);
+  --shadow-icon-tile:     0 2px 12px rgba(0,0,0,0.12);
+  --bg-icon-tile-hover:   rgba(255,255,255,0.95);
+  --border-icon-tile-hover: #3B82F6;
+  --color-icon-glyph:     #1e293b;
+  --text-icon-label:      #1e293b;
+  --shadow-icon-label:    none;
+
+  /* Window content accents */
+  --pill-bg:              #dbeafe;
+  --pill-border:          #93c5fd;
+  --pill-text:            #1d4ed8;
+  --heading:              #1d4ed8;
+  --metric:               #0f172a;
+
+  /* Clock widget */
+  --clock-time:           #0f172a;
+  --clock-secondary:      rgba(30,41,59,0.70);
+  --clock-accent:         rgba(30,41,59,0.70);
+  --shadow-clock:         0 1px 8px rgba(255,255,255,0.9);
+
+  /* Start menu */
+  --bg-startmenu:         rgba(248,250,252,0.95);
+  --border-startmenu:     rgba(0,0,0,0.08);
+  --shadow-startmenu:     0 -8px 40px rgba(0,0,0,0.12);
+  --text-startmenu:       #0f172a;
+  --bg-search:            rgba(0,0,0,0.05);
+  --border-search:        rgba(0,0,0,0.10);
+  --text-search:          #0f172a;
+  --text-search-placeholder: rgba(15,23,42,0.45);
+  --bg-pwr:               rgba(0,0,0,0.04);
+  --bg-pwr-hover:         rgba(59,130,246,0.10);
+  --text-pwr:             #0f172a;
+  --text-applabel:        #1e293b;
+
+  /* Context menu */
+  --bg-ctxmenu:           rgba(255,255,255,0.95);
+  --border-ctxmenu:       rgba(0,0,0,0.10);
+  --text-ctxmenu:         #0f172a;
+  --bg-ctxmenu-hover:     rgba(59,130,246,0.08);
+
+  /* Scrollbar */
+  --scrollbar-thumb:      #94a3b8;
+  --scrollbar-thumb-hover: #64748b;
+}
+
+/* Theme transition — smooth color flips */
+*, *::before, *::after {
+  transition-property: background-color, border-color, color;
+  transition-duration: 200ms;
+  transition-timing-function: ease;
+}
+
+/* Hide Stark theme elements in light mode */
+[data-theme="light"] .stark-only {
+  display: none !important;
+}
+
+/* Custom scrollbars (themed) */
 .samir-scroll {
   overflow-y: auto;
   overflow-x: hidden;
@@ -25,14 +211,33 @@ body {
   background: transparent;
 }
 .samir-scroll::-webkit-scrollbar-thumb {
-  background: rgba(59,130,246,0.4);
+  background: var(--scrollbar-thumb);
   border-radius: 3px;
 }
 .samir-scroll::-webkit-scrollbar-thumb:hover {
-  background: rgba(59,130,246,0.7);
+  background: var(--scrollbar-thumb-hover);
 }
 
-/* HUD grid overlay — thin 60px repeating lines at 4% blue opacity */
+/* Terminal-specific scrollbar — 4px green, unaffected by theme */
+.terminal-scroll {
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.terminal-scroll::-webkit-scrollbar {
+  width: 4px;
+}
+.terminal-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+.terminal-scroll::-webkit-scrollbar-thumb {
+  background: rgba(34,197,94,0.3);
+  border-radius: 2px;
+}
+.terminal-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgba(34,197,94,0.55);
+}
+
+/* HUD grid overlay — only visible in dark mode */
 .hud-grid {
   background-image:
     linear-gradient(rgba(239, 68, 68, 0.04) 1px, transparent 1px),
@@ -40,7 +245,7 @@ body {
   background-size: 60px 60px;
 }
 
-/* Arc reactor pulse — subtle scale + opacity breathe over 4s */
+/* Arc reactor pulse */
 @keyframes arc-pulse {
   0%, 100% { transform: scale(1);     opacity: 0.72; }
   50%       { transform: scale(1.032); opacity: 1;    }
@@ -49,4 +254,69 @@ body {
 .arc-reactor-wrap {
   animation: arc-pulse 4s ease-in-out infinite;
   transform-origin: center center;
+}
+
+/* Wallpaper photo layer */
+.desktop-wallpaper {
+  position: absolute;
+  inset: 0;
+  background-image: var(--wallpaper-img);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ─────────────────────────────────────────
+   Light-mode descendant overrides for
+   hardcoded colors inside windows.
+   Terminal opts out via [data-terminal-window].
+   ───────────────────────────────────────── */
+[data-theme="light"] [data-window]:not([data-terminal-window])
+  :is(
+    .text-white,
+    .text-zinc-100,
+    .text-zinc-200,
+    .text-zinc-300,
+    .text-\[\#e2e8f0\]
+  ) {
+  color: #1e293b;
+}
+[data-theme="light"] [data-window]:not([data-terminal-window])
+  :is(.text-zinc-400, .text-zinc-500, .text-zinc-600) {
+  color: #475569;
+}
+[data-theme="light"] [data-window]:not([data-terminal-window])
+  :is(
+    .text-blue-400,
+    .text-blue-300,
+    .text-blue-200,
+    .text-\[\#93c5fd\]
+  ) {
+  color: #1d4ed8;
+}
+[data-theme="light"] [data-window]:not([data-terminal-window])
+  :is(.bg-\[\#0d1117\], .bg-\[\#161b22\], .bg-\[\#1a2035\]) {
+  background-color: rgba(255,255,255,0.55);
+}
+[data-theme="light"] [data-window]:not([data-terminal-window])
+  :is(.border-\[\#1e2a3a\]) {
+  border-color: rgba(0,0,0,0.10);
+}
+
+/* Tech pills — match inline rgba styles and remap in light mode */
+[data-theme="light"] [data-window]:not([data-terminal-window])
+  [style*="rgba(59,130,246,0.12)"] {
+  background-color: #dbeafe !important;
+  border-color: #93c5fd !important;
+}
+[data-theme="light"] [data-window]:not([data-terminal-window])
+  [style*="rgba(59,130,246,0.10)"] {
+  background-color: #dbeafe !important;
+}
+
+/* Terminal — preserve dark interior, add visible outer border in light */
+[data-theme="light"] [data-terminal-window] {
+  border: 1px solid rgba(0,0,0,0.25) !important;
 }

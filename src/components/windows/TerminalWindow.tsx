@@ -3,15 +3,25 @@
 import { useEffect, useRef, useState } from "react";
 import type { WindowType } from "@/types/desktop";
 
-interface Props {
-  onOpenWindow?: (type: WindowType) => void;
-}
-
-interface Line {
-  type: "input" | "output";
-  cwd?: string;
+interface DeletedItem {
+  name: string;
   content: string;
 }
+
+interface UserFolder {
+  name: string;
+  path: string;
+  createdAt: string;
+}
+
+interface Props {
+  onOpenWindow?: (type: WindowType) => void;
+  deletedItems?: DeletedItem[];
+}
+
+type Entry =
+  | { kind: "message"; id: number; content: string }
+  | { kind: "command"; id: number; cwd: string; command: string; output: string | null };
 
 const ABOUT_TEXT = `Samir Kumal — Computer Science student at Georgia State University
 (graduating May 2028), focused on data engineering, machine learning,
@@ -74,19 +84,20 @@ const EXPERIENCE_TEXT = `[2026-01]  Open Source Contributor — PyTorch Vision (
              improved exam outcomes by 28% across 30+ students.
            - Communicated quantitative concepts to non-technical audiences.`;
 
-const HELP_TEXT = `Available commands:
-  ls               list desktop apps
-  cd <folder>      change directory  (e.g. cd projects, cd ..)
-  cat <file>       print file contents
-                   (about.exe, education.txt, skills.json, experience.log)
-  open <file>      open a desktop window
-  clear            clear the terminal
-  whoami           print user info
-  date             print current date and time
-  echo <text>      print text
-  help             show this help`;
+const HELP_TEXT = `Available Commands:
+─────────────────────
+ls                  List files and folders in current directory
+cd [folder]         Change directory (cd .. to go back)
+mkdir [name]        Create a new folder
+cat [file]          Print file contents
+open [file]         Open a file/app window
+clear               Clear terminal output
+help                Show this help message
+whoami              Show user information
+date                Show current date and time
+echo [text]         Print text back`;
 
-const LS_OUTPUT =
+const LS_ROOT =
   "about.exe   projects/   education.txt   skills.json   experience.log   contact.lnk   terminal.exe   mypc/   recycle-bin/";
 
 const FILE_TO_WINDOW: Record<string, WindowType> = {
@@ -114,14 +125,28 @@ const WELCOME = `SamirOS Terminal v1.0
 Type 'help' for available commands.
 `;
 
-export function TerminalWindow({ onOpenWindow }: Props) {
+const BUILTIN_NAMES = new Set([
+  "about.exe", "about",
+  "projects", "projects/",
+  "education.txt", "education",
+  "skills.json", "skills",
+  "experience.log", "experience",
+  "contact.lnk", "contact",
+  "terminal.exe", "terminal",
+  "mypc", "mypc/",
+  "recycle-bin", "recycle-bin/",
+]);
+
+export function TerminalWindow({ onOpenWindow, deletedItems = [] }: Props) {
   const [cwd, setCwd] = useState("~");
-  const [lines, setLines] = useState<Line[]>([
-    { type: "output", content: WELCOME },
+  const [entries, setEntries] = useState<Entry[]>([
+    { kind: "message", id: 0, content: WELCOME },
   ]);
   const [input, setInput] = useState("");
   const [history, setHistory] = useState<string[]>([]);
   const [historyIdx, setHistoryIdx] = useState(-1);
+  const [userFolders, setUserFolders] = useState<UserFolder[]>([]);
+  const idRef = useRef(1);
   const inputRef = useRef<HTMLInputElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -133,20 +158,24 @@ export function TerminalWindow({ onOpenWindow }: Props) {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
-  }, [lines, input]);
+  }, [entries, input]);
 
   const promptStr = (dir: string) => `samir@samiros:${dir}$ `;
 
   const execute = (cmd: string) => {
     const trimmed = cmd.trim();
-    const inputLine: Line = { type: "input", cwd, content: cmd };
-
+    const currentCwd = cwd;
     setInput("");
     setHistoryIdx(-1);
     if (trimmed) setHistory((h) => [cmd, ...h]);
 
+    const id = idRef.current++;
+
     if (!trimmed) {
-      setLines((prev) => [...prev, inputLine]);
+      setEntries((prev) => [
+        ...prev,
+        { kind: "command", id, cwd: currentCwd, command: "", output: null },
+      ]);
       return;
     }
 
@@ -154,18 +183,37 @@ export function TerminalWindow({ onOpenWindow }: Props) {
     const name = parts[0];
     const args = parts.slice(1);
     const argText = args.join(" ");
-    let output = "";
+    let output: string | null = null;
 
     switch (name) {
-      case "ls":
-        output = LS_OUTPUT;
+      case "ls": {
+        if (currentCwd === "~/recycle-bin") {
+          output =
+            deletedItems.length > 0
+              ? deletedItems.map((i) => i.name).join("   ")
+              : "(empty)";
+        } else if (currentCwd !== "~") {
+          const subFolders = userFolders
+            .filter((f) => f.path === currentCwd)
+            .map((f) => f.name + "/");
+          output = subFolders.length > 0 ? subFolders.join("   ") : "(empty)";
+        } else {
+          const rootFolders = userFolders
+            .filter((f) => f.path === "~")
+            .map((f) => f.name + "/");
+          output =
+            rootFolders.length > 0
+              ? LS_ROOT + "   " + rootFolders.join("   ")
+              : LS_ROOT;
+        }
         break;
+      }
 
       case "cd": {
         const target = args[0] || "~";
         if (target === ".." || target === "../") {
-          if (cwd !== "~") {
-            const segs = cwd.split("/");
+          if (currentCwd !== "~") {
+            const segs = currentCwd.split("/");
             segs.pop();
             setCwd(segs.join("/") || "~");
           }
@@ -173,35 +221,78 @@ export function TerminalWindow({ onOpenWindow }: Props) {
           setCwd("~");
         } else {
           const dir = target.replace(/\/$/, "");
-          setCwd(cwd === "~" ? `~/${dir}` : `${cwd}/${dir}`);
+          setCwd(currentCwd === "~" ? `~/${dir}` : `${currentCwd}/${dir}`);
+        }
+        break;
+      }
+
+      case "mkdir": {
+        const folderName = args[0];
+        if (!folderName) {
+          output = "mkdir: missing operand";
+        } else if (!/^[a-zA-Z0-9][a-zA-Z0-9-]*$/.test(folderName)) {
+          output = "mkdir: invalid folder name";
+        } else {
+          const exists =
+            userFolders.some(
+              (f) => f.name === folderName && f.path === currentCwd
+            ) ||
+            (currentCwd === "~" && BUILTIN_NAMES.has(folderName));
+          if (exists) {
+            output = `mkdir: cannot create directory '${folderName}': File exists`;
+          } else {
+            setUserFolders((prev) => [
+              ...prev,
+              {
+                name: folderName,
+                path: currentCwd,
+                createdAt: new Date().toISOString(),
+              },
+            ]);
+          }
         }
         break;
       }
 
       case "cat": {
         const file = args[0];
-        if (!file) output = "cat: missing file operand";
-        else if (file === "about.exe") output = ABOUT_TEXT;
-        else if (file === "education.txt") output = EDUCATION_TEXT;
-        else if (file === "skills.json") output = SKILLS_TEXT;
-        else if (file === "experience.log") output = EXPERIENCE_TEXT;
-        else output = `cat: ${file}: No such file or directory`;
+        if (!file) {
+          output = "cat: missing file operand";
+        } else if (file === "about.exe") {
+          output = ABOUT_TEXT;
+        } else if (file === "education.txt") {
+          output = EDUCATION_TEXT;
+        } else if (file === "skills.json") {
+          output = SKILLS_TEXT;
+        } else if (file === "experience.log") {
+          output = EXPERIENCE_TEXT;
+        } else if (currentCwd === "~/recycle-bin") {
+          const item = deletedItems.find((i) => i.name === file);
+          output = item
+            ? item.content
+            : `cat: ${file}: No such file or directory`;
+        } else {
+          output = `cat: ${file}: No such file or directory`;
+        }
         break;
       }
 
       case "open": {
         const file = args[0];
         const wt = file ? FILE_TO_WINDOW[file] : undefined;
-        if (!file) output = "open: missing operand";
-        else if (wt && onOpenWindow) {
+        if (!file) {
+          output = "open: missing operand";
+        } else if (wt && onOpenWindow) {
           onOpenWindow(wt);
           output = `Opening ${file}...`;
-        } else output = `open: ${file}: cannot open`;
+        } else {
+          output = `open: ${file}: cannot open`;
+        }
         break;
       }
 
       case "clear":
-        setLines([]);
+        setEntries([]);
         return;
 
       case "help":
@@ -224,9 +315,10 @@ export function TerminalWindow({ onOpenWindow }: Props) {
         output = `command not found: ${name}. Type 'help' for available commands.`;
     }
 
-    const entries: Line[] = [inputLine];
-    if (output) entries.push({ type: "output", content: output });
-    setLines((prev) => [...prev, ...entries]);
+    setEntries((prev) => [
+      ...prev,
+      { kind: "command", id, cwd: currentCwd, command: trimmed, output },
+    ]);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -266,25 +358,57 @@ export function TerminalWindow({ onOpenWindow }: Props) {
         padding: "12px 14px",
       }}
     >
-      {lines.map((line, i) => (
-        <pre
-          key={i}
-          className="whitespace-pre-wrap break-words"
-          style={{
-            margin: 0,
-            fontFamily: "inherit",
-            fontSize: "inherit",
-            color: "#22c55e",
-          }}
-        >
-          {line.type === "input"
-            ? `${promptStr(line.cwd || "~")}${line.content}`
-            : line.content}
-        </pre>
-      ))}
+      {entries.map((entry) => {
+        if (entry.kind === "message") {
+          return (
+            <pre
+              key={entry.id}
+              className="whitespace-pre-wrap break-words"
+              style={{
+                margin: 0,
+                marginBottom: 8,
+                fontFamily: "inherit",
+                fontSize: "inherit",
+                color: "#22c55e",
+              }}
+            >
+              {entry.content}
+            </pre>
+          );
+        }
+
+        return (
+          <div key={entry.id} style={{ marginBottom: 20 }}>
+            <pre
+              className="whitespace-pre-wrap break-words"
+              style={{ margin: 0, fontFamily: "inherit", fontSize: "inherit" }}
+            >
+              <span style={{ color: "#22c55e" }}>{promptStr(entry.cwd)}</span>
+              <span style={{ color: "#ffffff" }}>{entry.command}</span>
+            </pre>
+            {entry.output !== null && (
+              <>
+                <div style={{ height: 12 }} />
+                <pre
+                  className="whitespace-pre-wrap break-words"
+                  style={{
+                    margin: 0,
+                    fontFamily: "inherit",
+                    fontSize: "inherit",
+                    color: "#86efac",
+                  }}
+                >
+                  {entry.output}
+                </pre>
+                <div style={{ height: 12 }} />
+              </>
+            )}
+          </div>
+        );
+      })}
 
       <div className="flex items-baseline">
-        <span style={{ whiteSpace: "pre", flexShrink: 0 }}>
+        <span style={{ whiteSpace: "pre", flexShrink: 0, color: "#22c55e" }}>
           {promptStr(cwd)}
         </span>
         <input
@@ -298,7 +422,7 @@ export function TerminalWindow({ onOpenWindow }: Props) {
           autoCapitalize="off"
           className="flex-1 min-w-0 bg-transparent border-0 outline-none p-0"
           style={{
-            color: "#22c55e",
+            color: "#ffffff",
             fontFamily: "inherit",
             fontSize: "inherit",
             caretColor: "#22c55e",

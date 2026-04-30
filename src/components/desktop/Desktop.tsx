@@ -72,10 +72,16 @@ const ICON_INIT: Record<string, { x: number; y: number }> = {
   "recycle-bin": { x: 24,  y: 554 },
 };
 
+interface DeletedItem {
+  name: string;
+  content: string;
+}
+
 function renderWindowContent(
   type: WindowType,
   onOpenWindow: (t: WindowType) => void,
   binItems: BinItem[],
+  deletedItems: DeletedItem[],
   onRestore: (t: WindowType) => void,
   onEmpty: () => void,
 ) {
@@ -88,7 +94,7 @@ function renderWindowContent(
     case "contact":         return <ContactWindow />;
     case "fun":             return <FunWindow />;
     case "secret":          return <SecretWindow />;
-    case "terminal":        return <TerminalWindow onOpenWindow={onOpenWindow} />;
+    case "terminal":        return <TerminalWindow onOpenWindow={onOpenWindow} deletedItems={deletedItems} />;
     case "mypc":            return <MyComputerWindow onOpenWindow={onOpenWindow} />;
     case "recycle-bin":     return <RecycleBinWindow items={binItems} onRestore={onRestore} onEmpty={onEmpty} />;
     case "project-fashion": return <ProjectFashionWindow />;
@@ -163,6 +169,10 @@ export function Desktop({
     .filter((i): i is IconDef => !!i)
     .map((i) => ({ type: i.type, icon: i.icon, label: i.label }));
   const recycleHasItems = deletedIcons.length > 0;
+  const deletedItems: DeletedItem[] = binItems.map((item) => ({
+    name: item.label,
+    content: `[${item.label}] — deleted item`,
+  }));
 
   return (
     <div
@@ -291,7 +301,7 @@ export function Desktop({
             onMove={(x, y) => onMoveWindow(win.id, x, y)}
             onResize={(w, h, x, y) => onResizeWindow(win.id, w, h, x, y)}
           >
-            {renderWindowContent(win.type, onOpenWindow, binItems, restoreIcon, emptyBin)}
+            {renderWindowContent(win.type, onOpenWindow, binItems, deletedItems, restoreIcon, emptyBin)}
           </Window>
         ))}
       </div>

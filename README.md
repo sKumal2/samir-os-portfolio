@@ -2,11 +2,6 @@
 
 a deployable developer portfolio built with next.js 15, tailwind, and magic UI components. driven end-to-end by claude code with MCPs doing the heavy lifting (docs lookup, repo creation, deployment).
 
-## difficulty
-**easy to medium**, great pick if this is your first workshop or if you want a win you can actually put on your resume tonight.
-
-## time
-~60–75 minutes
 
 ## stack
 - next.js 15 (App Router, typescript)

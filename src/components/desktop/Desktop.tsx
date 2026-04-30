@@ -49,7 +49,7 @@ const ICONS: IconDef[] = [
   { type: "projects",    icon: FolderOpen,    label: "projects/"     },
   { type: "education",   icon: GraduationCap, label: "education.txt" },
   { type: "skills",      icon: Code2,         label: "skills.json"   },
-  { type: "experience",  icon: Briefcase,     label: "experience.log"},
+  { type: "experience",  icon: Briefcase,     label: "experience.md"},
   { type: "contact",     icon: Mail,          label: "contact.lnk"   },
   { type: "fun",         icon: Gamepad2,      label: "fun/"          },
   { type: "secret",      icon: Lock,          label: "secret.exe"    },

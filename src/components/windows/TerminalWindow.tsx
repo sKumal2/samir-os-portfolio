@@ -98,7 +98,7 @@ date                Show current date and time
 echo [text]         Print text back`;
 
 const LS_ROOT =
-  "about.exe   projects/   education.txt   skills.json   experience.log   contact.lnk   terminal.exe   mypc/   recycle-bin/";
+  "about.exe   projects/   education.txt   skills.json   experience.md   contact.lnk   terminal.exe   mypc/   recycle-bin/";
 
 const FILE_TO_WINDOW: Record<string, WindowType> = {
   "about.exe": "about",
@@ -109,7 +109,7 @@ const FILE_TO_WINDOW: Record<string, WindowType> = {
   education: "education",
   "skills.json": "skills",
   skills: "skills",
-  "experience.log": "experience",
+  "experience.md": "experience",
   experience: "experience",
   "contact.lnk": "contact",
   contact: "contact",
@@ -130,7 +130,7 @@ const BUILTIN_NAMES = new Set([
   "projects", "projects/",
   "education.txt", "education",
   "skills.json", "skills",
-  "experience.log", "experience",
+  "experience.md", "experience",
   "contact.lnk", "contact",
   "terminal.exe", "terminal",
   "mypc", "mypc/",
@@ -264,7 +264,7 @@ export function TerminalWindow({ onOpenWindow, deletedItems = [] }: Props) {
           output = EDUCATION_TEXT;
         } else if (file === "skills.json") {
           output = SKILLS_TEXT;
-        } else if (file === "experience.log") {
+        } else if (file === "experience.md") {
           output = EXPERIENCE_TEXT;
         } else if (currentCwd === "~/recycle-bin") {
           const item = deletedItems.find((i) => i.name === file);

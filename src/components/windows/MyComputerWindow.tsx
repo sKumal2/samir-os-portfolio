@@ -37,7 +37,7 @@ const DESKTOP_ITEMS: { type: WindowType; icon: LucideIcon; label: string }[] = [
   { type: "projects",   icon: FolderOpen,    label: "projects/"      },
   { type: "education",  icon: GraduationCap, label: "education.txt"  },
   { type: "skills",     icon: Code2,         label: "skills.json"    },
-  { type: "experience", icon: Briefcase,     label: "experience.log" },
+  { type: "experience", icon: Briefcase,     label: "experience.md" },
   { type: "contact",    icon: Mail,          label: "contact.lnk"    },
   { type: "terminal",   icon: Terminal,      label: "terminal.exe"   },
 ];
@@ -57,7 +57,7 @@ const PROJECTS: ProjectItem[] = [
 const DOCUMENTS: { name: string; icon: LucideIcon; target: WindowType }[] = [
   { name: "resume.pdf",     icon: FileText, target: "contact"    },
   { name: "skills.json",    icon: FileJson, target: "skills"     },
-  { name: "experience.log", icon: FileText, target: "experience" },
+  { name: "experience.md", icon: FileText, target: "experience" },
   { name: "education.txt",  icon: FileText, target: "education"  },
 ];
 

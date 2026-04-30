@@ -1,33 +1,55 @@
-# project A, personal portfolio site
+# SamirOS
 
-a deployable developer portfolio built with next.js 15, tailwind, and magic UI components. driven end-to-end by claude code with MCPs doing the heavy lifting (docs lookup, repo creation, deployment).
+SamirOS is a browser-based, interactive desktop operating system simulation designed to showcase my software engineering portfolio. Built with modern web technologies, it provides an immersive experience that goes beyond a traditional static resume site.
 
+## Features
 
-## stack
-- next.js 15 (App Router, typescript)
-- tailwind CSS
-- magic UI components (via the `magic` MCP)
-- deployed to vercel
+Multi-Window Environment: Draggable and resizable windows for exploring projects and professional background.
+Dynamic File System: Interactive shortcuts and folder structures mimicking a real OS.
+Terminal Emulator: A functional command-line interface for tech-savvy visitors.
+Integrated Resume Viewer: Direct access to professional credentials within the OS environment.
+Responsive Design: Fluid experience across desktop and mobile browsers.
 
-## MCPs used
-- `context7`, live next.js and magic UI docs
-- `github`, create the repo and push
-- `vercel`, deploy
-- `magic`, magic UI component catalog
+## Tech Stack
 
-## subagents used
-- `ui-designer`, for styling decisions and component picks
+Framework: Next.js 15 (App Router)
+Language: TypeScript
+Styling: Tailwind CSS
+Components: Magic UI for high-performance animations and visual effects.
+Deployment: Vercel
 
-## skills used
-- `everything-claude-code-conventions`, consistent commit messages
+## Agent-Driven Development
 
-## how to start
-1. fill in the brackets in [`PROMPT.md`](./PROMPT.md)
-2. launch claude code from this folder: `claude`
-3. paste your customized prompt
-4. follow along and iterate
+This project was developed using advanced AI orchestration techniques:
+Claude Code: Utilized for end-to-end development, from architectural decisions to component selection.
+MCP (Model Context Protocol): Integrated context7 for live documentation lookups and magic for cataloging UI components.
 
-full walkthrough is in the root [`GUIDE.md`](../../GUIDE.md) → section 6.
+## Getting Started
 
-## when you're done
-your live URL should work on both desktop and mobile, feature 3 real projects from your own work, and use at least 2 magic UI components. see the "done checklist" at the bottom of `PROMPT.md`.
+To run the project locally, follow these steps:
+
+1. Clone the repository:
+git clone [https://github.com/sKumal2/samir-os-portfolio.git](https://github.com/sKumal2/samir-os-portfolio.git)
+cd samir-os-portfolio
+
+2. Install dependencies:
+pnpm install
+
+3. Run the development server:
+pnpm dev
+
+4. Open the application:
+Navigate to http://localhost:3000 to view your local instance.
+
+## Project Structure
+
+public: Static assets (icons, images, resume.pdf)
+src/components: OS UI components (Windows, Taskbar, Desktop)
+src/app: Next.js App Router (pages and layouts)
+src/styles: Global styling and Tailwind configurations
+PROMPT.md: AI orchestration guidelines
+next.config.ts: Project configuration
+
+## License
+
+This project is open-source. Feel free to fork and adapt it for your own portfolio.
